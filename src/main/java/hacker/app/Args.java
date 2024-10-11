@@ -21,8 +21,8 @@ public final class Args {
 
   @SuppressWarnings("PMD.UseVarargs")
   private Args(final String[] args) throws UnknownHostException {
-      this.ipAddr = InetAddress.getByName(args[0]);
-      this.socketPort = Integer.parseInt(args[1]);
+    this.ipAddr = InetAddress.getByName(args[0]);
+    this.socketPort = Integer.parseInt(args[1]);
   }
 
   public Args(InetAddress ipAddr, int socketPort) throws UnknownHostException {
@@ -32,7 +32,7 @@ public final class Args {
 
   // CRUD-R: Properties
 
-  public SocketAddress socketAddr(){
+  public SocketAddress socketAddr() {
     return new InetSocketAddress(this.ipAddr(), this.port());
   }
 

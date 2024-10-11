@@ -50,7 +50,7 @@ public final class Password {
         for (int firstDialToRotIdx = this.rotatingDials.size() - 1;
             0 <= firstDialToRotIdx; --firstDialToRotIdx) {
           var firstDialToRot = this.rotatingDials.get(firstDialToRotIdx);
-          try{
+          try {
             firstDialToRot.next(); // Rotating
             // On successful rotation reset all trailing dials
             for (int dialToResetIdx = firstDialToRotIdx + 1;
@@ -60,18 +60,19 @@ public final class Password {
             }
             // Since rotation has been performed we can return a peeked value.
             return ret;
-          }catch (NoSuchElementException $){
+          } catch (NoSuchElementException $) {
             continue;
           }
         }
 
-        this.rotatingDials = RotDial.constructDialsAsm(this.rotatingDials.size() + 1);
+        this.rotatingDials =
+            RotDial.constructDialsAsm(this.rotatingDials.size() + 1);
         return ret;
       }
     };
   }
 
-  public static Stream<String> allCombsStream(){
+  public static Stream<String> allCombsStream() {
     return Converter.iterToSteam(allCombinations());
   }
 

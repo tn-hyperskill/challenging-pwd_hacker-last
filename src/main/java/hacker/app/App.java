@@ -1,6 +1,5 @@
-package hacker;
+package hacker.app;
 
-import hacker.app.Args;
 import hacker.padlock.Password;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -8,7 +7,16 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class Main {
+public final class App {
+
+  public static final int SO_TIMEOUT = 5000;
+
+  // CRUD-C
+
+  private App() {
+  }
+
+  // CRUD-R
 
   public static void main(String[] rawArgs) throws UnknownHostException {
     var args = Args.parse(rawArgs);
@@ -18,7 +26,7 @@ public class Main {
       // Connect to a host and a port using the socket
       System.err.println("Connecting to server...");
       sock.connect(args.socketAddr());
-      sock.setSoTimeout(5000);  // Set a timeout to prevent indefinite waiting
+      sock.setSoTimeout(SO_TIMEOUT);  // Set a timeout to prevent indefinite waiting
 
       System.err.println("Connected successfully. Sending message...");
 
@@ -27,20 +35,21 @@ public class Main {
       try (var dataOut = new DataOutputStream(sock.getOutputStream());
           var dataIn = new DataInputStream(sock.getInputStream())) {
 
-        for (var combIter = Password.allCombinations(); combIter.hasNext(); combIter.discardNext()){
-              try {
-                dataOut.writeUTF(combIter.peek());
-                dataOut.flush();
+        for (var combIter = Password.allCombinations(); combIter.hasNext();
+            combIter.discardNext()) {
+          try {
+            dataOut.writeUTF(combIter.peek());
+            dataOut.flush();
 
-                String response = dataIn.readUTF();
-                if (response.equals("Connection success!")){
-                  System.out.println(combIter.peek());
-                  break;
-                }
-              } catch (IOException e) {
-                throw new RuntimeException(e);
-              }
+            String response = dataIn.readUTF();
+            if (response.equals("Connection success!")) {
+              System.out.println(combIter.peek());
+              break;
             }
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
+        }
 
 
       } catch (IOException e) {

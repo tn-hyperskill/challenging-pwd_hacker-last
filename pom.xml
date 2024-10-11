@@ -85,6 +85,28 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${checkstyle.version}</version>
+        <configuration>
+          <failOnViolation>true</failOnViolation>
+          <suppressionsFileExpression>
+            checkstyle.suppressions.file
+          </suppressionsFileExpression>
+          <suppressionsLocation>
+            ./static_anal/cfg/cs-suppressions.xml
+          </suppressionsLocation>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>verify</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <!-- compiler -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -125,6 +147,20 @@
           <rulesets>
             <ruleset>./static_anal/cfg/pmd-ruleset.xml</ruleset>
           </rulesets>
+        </configuration>
+      </plugin>
+      <!-- Static analysers – Checkstyle -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${checkstyle.version}</version>
+        <configuration>
+          <suppressionsFileExpression>
+            checkstyle.suppressions.file
+          </suppressionsFileExpression>
+          <suppressionsLocation>
+            ./static_anal/cfg/cs-suppressions.xml
+          </suppressionsLocation>
         </configuration>
       </plugin>
       <!-- Misc -->

@@ -7,9 +7,16 @@ import java.util.stream.StreamSupport;
 
 public final class Converter {
 
+  // CRUD-C
+
+  private Converter() {
+  }
+
+  // CRUD-R
+
   public static <T> Stream<T> iterToSteam(Iterator<T> iterator) {
     return StreamSupport.stream(
         Spliterators.spliteratorUnknownSize(iterator, 0),
-    false);
+        false);
   }
 }
