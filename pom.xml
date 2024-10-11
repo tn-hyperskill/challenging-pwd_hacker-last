@@ -1,20 +1,138 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
+
   <groupId>edu.tnehring</groupId>
   <artifactId>pwd-hacker</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>Password Hacker</name>
-  <url>http://maven.apache.org</url>
+  <url>https://maven.apache.org</url>
+
+  <properties>
+    <!-- Misc -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- Java versions -->
+    <java.version>17</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <!-- Plugin versions – Static analyzers -->
+    <spotbugs.version>4.8.6.0</spotbugs.version>
+    <pmd.version>3.23.0</pmd.version>
+    <checkstyle.version>3.4.0</checkstyle.version>
+    <!-- Plugin versions – Reports -->
+    <project-info-reports.version>3.6.2</project-info-reports.version>
+    <jxr.version>3.4.0</jxr.version>
+    <!-- Plugin versions – Misc -->
+    <compiler_plugin.version>3.13.0</compiler_plugin.version>
+  </properties>
 
   <dependencies>
+    <!-- Tests -->
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.8.1</version>
       <scope>test</scope>
     </dependency>
+    <!-- Static analysis -->
+    <dependency>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs-annotations</artifactId>
+      <version>4.8.6</version>
+    </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Static analysis – Spotbugs -->
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs.version}</version>
+        <configuration>
+          <failOnError>true</failOnError>
+          <excludeFilterFile>./static_anal/cfg/sb-exclude.xml</excludeFilterFile>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>verify</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- Static analysers – PMD -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>${pmd.version}</version>
+        <configuration>
+          <failOnViolation>true</failOnViolation>
+          <rulesets>
+            <ruleset>./static_anal/cfg/pmd-ruleset.xml</ruleset>
+          </rulesets>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>verify</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- compiler -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${compiler_plugin.version}</version>
+        <configuration>
+          <release>${java.version}
+          </release>
+        </configuration>
+      </plugin>
+      <!-- Reports -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>${project-info-reports.version}</version>
+      </plugin>
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+      <!-- Static analysers – Spotbugs -->
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs.version}</version>
+        <configuration>
+          <excludeFilterFile>./static_anal/cfg/sb-exclude.xml</excludeFilterFile>
+        </configuration>
+      </plugin>
+      <!-- Static analysers – PMD -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>${pmd.version}</version>
+
+        <configuration>
+          <rulesets>
+            <ruleset>./static_anal/cfg/pmd-ruleset.xml</ruleset>
+          </rulesets>
+        </configuration>
+      </plugin>
+      <!-- Misc -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>${jxr.version}</version>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>

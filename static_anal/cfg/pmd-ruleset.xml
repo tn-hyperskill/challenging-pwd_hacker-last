@@ -7,6 +7,7 @@
         <exclude name="SystemPrintln" />
         <exclude name="JUnitAssertionsShouldIncludeMessage" />
         <exclude name="OneDeclarationPerLine" />
+        <exclude name="LiteralsFirstInComparisons" />
     </rule>
 
     <!-- Override specific rule properties -->
