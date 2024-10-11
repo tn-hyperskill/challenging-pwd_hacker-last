@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+  "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+  "https://checkstyle.org/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+
+  <!-- Choices -->
+  <!-- Style choices -->
+  <suppress checks="HiddenField|MultipleVariableDeclarations|NoWhitespaceBefore"
+    files="."/>
+  <!-- Pattern choices -->
+  <suppress checks="FinalParameters" files="."/>
+  <!-- Convention choices -->
+  <suppress checks="ParameterName|LocalVariableName" files="."/>
+
+
+  <!-- Time wasters -->
+  <!-- Aesthetics -->
+  <suppress checks="EmptyForIteratorPad" files="."/>
+  <!-- CS' paranoias -->
+  <suppress checks="VisibilityModifier" files="."/>
+  <!-- enemies of DRY -->
+  <suppress checks="JavadocMethod" files="."/>
+
+
+  <!-- Miscellaneous -->
+  <!-- Overkill for this low-budget project -->
+  <suppress checks="JavadocPackage" files="."/>
+  <suppress checks="JavadocStyle" files="."/>
+  <suppress checks="JavadocVariable" files="."/>
+  <!-- casus belli against IntelliJ formatter -->
+  <suppress checks="LineLength" files="."/>
+
+  <!-- Checkstyle misses -->
+  <suppress checks="MagicNumber" files=".*Test\.java"/>
+  <suppress checks="MagicNumber"
+    files="src/main/java/battleship/util/matrix/MatrixCoordinates.java"/>
+  <suppress checks="DesignForExtension" files="./src/main/java/battleship/shot/Shot(Hit|Damaged).java" />
+
+</suppressions>

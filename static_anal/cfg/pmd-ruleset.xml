@@ -1,0 +1,18 @@
+<ruleset name="Main Ruleset">
+    <description>
+        The main Project Meets Documentation (PMD) ruleset for this project.
+    </description>
+    <!-- Include all best practices, but exclude SystemPrintln -->
+    <rule ref="category/java/bestpractices.xml">
+        <exclude name="SystemPrintln" />
+        <exclude name="JUnitAssertionsShouldIncludeMessage" />
+        <exclude name="OneDeclarationPerLine" />
+    </rule>
+
+    <!-- Override specific rule properties -->
+    <rule ref="category/java/bestpractices.xml/JUnitTestContainsTooManyAsserts">
+        <properties>
+            <property name="maximumAsserts" value="4" />
+        </properties>
+    </rule>
+</ruleset>
