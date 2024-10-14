@@ -15,41 +15,41 @@ public final class PeekingIterator&lt;T&gt; implements PeekableIterator&lt;T&gt;
   // CRUD-C
 
   @SuppressFBWarnings(&quot;EI&quot;)
-<span class="nc" id="L18">  public PeekingIterator(Iterator&lt;T&gt; inner) {</span>
-<span class="nc" id="L19">    this.inner = inner;</span>
-<span class="nc" id="L20">    this.peeked = Optional.empty();</span>
-<span class="nc" id="L21">    this.discardCurrentPeeked();</span>
-<span class="nc" id="L22">  }</span>
+<span class="fc" id="L18">  public PeekingIterator(Iterator&lt;T&gt; inner) {</span>
+<span class="fc" id="L19">    this.inner = inner;</span>
+<span class="fc" id="L20">    this.peeked = Optional.empty();</span>
+<span class="fc" id="L21">    this.discardCurrentPeeked();</span>
+<span class="fc" id="L22">  }</span>
 
   // CRUD-R
 
   @Override public T peek() throws NoSuchElementException {
-<span class="nc" id="L27">    return this.peeked.orElseThrow(NoSuchElementException::new);</span>
+<span class="fc" id="L27">    return this.peeked.orElseThrow(NoSuchElementException::new);</span>
   }
 
   @Override public boolean hasNext() {
-<span class="nc" id="L31">    return false;</span>
+<span class="fc" id="L31">    return this.peeked.isPresent();</span>
   }
 
   // CRUD-U
 
   @Override
   public void discardNext() {
-<span class="nc" id="L38">    this.discardCurrentPeeked();</span>
-<span class="nc" id="L39">  }</span>
+<span class="fc" id="L38">    this.discardCurrentPeeked();</span>
+<span class="fc" id="L39">  }</span>
 
   @Override public T next() throws NoSuchElementException {
-<span class="nc" id="L42">    var ret = this.peek();</span>
-<span class="nc" id="L43">    this.discardCurrentPeeked();</span>
-<span class="nc" id="L44">    return ret;</span>
+<span class="fc" id="L42">    var ret = this.peek();</span>
+<span class="fc" id="L43">    this.discardCurrentPeeked();</span>
+<span class="fc" id="L44">    return ret;</span>
   }
 
   private void discardCurrentPeeked() {
     try {
-<span class="nc" id="L49">      this.peeked = Optional.of(this.inner.next());</span>
-<span class="nc" id="L50">    } catch (NoSuchElementException $) {</span>
-<span class="nc" id="L51">      this.peeked = Optional.empty();</span>
-<span class="nc" id="L52">    }</span>
-<span class="nc" id="L53">  }</span>
+<span class="fc" id="L49">      this.peeked = Optional.of(this.inner.next());</span>
+<span class="fc" id="L50">    } catch (NoSuchElementException ignored) {</span>
+<span class="fc" id="L51">      this.peeked = Optional.empty();</span>
+<span class="fc" id="L52">    }</span>
+<span class="fc" id="L53">  }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

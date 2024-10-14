@@ -26,39 +26,40 @@ public final class App {
       // Connect to a host and a port using the socket
 <span class="nc" id="L27">      System.err.println(&quot;Connecting to server...&quot;);</span>
 <span class="nc" id="L28">      sock.connect(args.socketAddr());</span>
-<span class="nc" id="L29">      sock.setSoTimeout(SO_TIMEOUT);  // Set a timeout to prevent indefinite waiting</span>
+<span class="nc" id="L29">      sock.setSoTimeout(</span>
+          SO_TIMEOUT);  // Set a timeout to prevent indefinite waiting
 
-<span class="nc" id="L31">      System.err.println(&quot;Connected successfully. Sending message...&quot;);</span>
+<span class="nc" id="L32">      System.err.println(&quot;Connected successfully. Sending message...&quot;);</span>
 
       // Send a message from the third command line argument to the host
       // using the socket
-<span class="nc" id="L35">      try (var dataOut = new DataOutputStream(sock.getOutputStream());</span>
-<span class="nc" id="L36">          var dataIn = new DataInputStream(sock.getInputStream())) {</span>
+<span class="nc" id="L36">      try (var dataOut = new DataOutputStream(sock.getOutputStream());</span>
+<span class="nc" id="L37">          var dataIn = new DataInputStream(sock.getInputStream())) {</span>
 
-<span class="nc bnc" id="L38" title="All 2 branches missed.">        for (var combIter = Password.allCombinations(); combIter.hasNext();</span>
-<span class="nc" id="L39">            combIter.discardNext()) {</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        for (var combIter = Password.allCombinations(); combIter.hasNext();</span>
+<span class="nc" id="L40">            combIter.discardNext()) {</span>
           try {
-<span class="nc" id="L41">            dataOut.writeUTF(combIter.peek());</span>
-<span class="nc" id="L42">            dataOut.flush();</span>
+<span class="nc" id="L42">            dataOut.writeUTF(combIter.peek());</span>
+<span class="nc" id="L43">            dataOut.flush();</span>
 
-<span class="nc" id="L44">            String response = dataIn.readUTF();</span>
-<span class="nc bnc" id="L45" title="All 2 branches missed.">            if (response.equals(&quot;Connection success!&quot;)) {</span>
-<span class="nc" id="L46">              System.out.println(combIter.peek());</span>
-<span class="nc" id="L47">              break;</span>
+<span class="nc" id="L45">            String response = dataIn.readUTF();</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">            if (response.equals(&quot;Connection success!&quot;)) {</span>
+<span class="nc" id="L47">              System.out.println(combIter.peek());</span>
+<span class="nc" id="L48">              break;</span>
             }
-<span class="nc" id="L49">          } catch (IOException e) {</span>
-<span class="nc" id="L50">            throw new RuntimeException(e);</span>
-<span class="nc" id="L51">          }</span>
+<span class="nc" id="L50">          } catch (IOException e) {</span>
+<span class="nc" id="L51">            throw new RuntimeException(e);</span>
+<span class="nc" id="L52">          }</span>
         }
 
 
-<span class="nc" id="L55">      } catch (IOException e) {</span>
-<span class="nc" id="L56">        System.err.println(&quot;Error during communication: &quot; + e.getMessage());</span>
-<span class="nc" id="L57">      }</span>
+<span class="nc" id="L56">      } catch (IOException e) {</span>
+<span class="nc" id="L57">        System.err.println(&quot;Error during communication: &quot; + e.getMessage());</span>
+<span class="nc" id="L58">      }</span>
 
-<span class="nc" id="L59">    } catch (IOException e) {</span>
-<span class="nc" id="L60">      System.err.println(&quot;Connection error: &quot; + e.getMessage());</span>
-<span class="nc" id="L61">    }</span>
-<span class="nc" id="L62">  }</span>
+<span class="nc" id="L60">    } catch (IOException e) {</span>
+<span class="nc" id="L61">      System.err.println(&quot;Connection error: &quot; + e.getMessage());</span>
+<span class="nc" id="L62">    }</span>
+<span class="nc" id="L63">  }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

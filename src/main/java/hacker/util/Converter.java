@@ -14,9 +14,13 @@ public final class Converter {
 
   // CRUD-R
 
-  public static <T> Stream<T> iterToSteam(Iterator<T> iterator) {
+  public static <T> Stream<T> iterToStream(Iterator<T> iterator) {
     return StreamSupport.stream(
         Spliterators.spliteratorUnknownSize(iterator, 0),
         false);
+  }
+
+  public static <T> Iterable<T> iterToIterable(Iterator<T> iterator) {
+    return () -> iterator;
   }
 }

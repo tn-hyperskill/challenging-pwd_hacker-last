@@ -14,7 +14,7 @@ public interface PeekableIterator<T> extends Iterator<T> {
   default void discardNext() {
     try {
       this.next();
-    } catch (NoSuchElementException $) {
+    } catch (NoSuchElementException ignored) {
     }
   }
 }

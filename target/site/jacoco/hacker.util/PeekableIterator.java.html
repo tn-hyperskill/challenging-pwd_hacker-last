@@ -14,7 +14,7 @@ public interface PeekableIterator&lt;T&gt; extends Iterator&lt;T&gt; {
   default void discardNext() {
     try {
 <span class="nc" id="L16">      this.next();</span>
-<span class="nc" id="L17">    } catch (NoSuchElementException $) {</span>
+<span class="nc" id="L17">    } catch (NoSuchElementException ignored) {</span>
 <span class="nc" id="L18">    }</span>
 <span class="nc" id="L19">  }</span>
 }

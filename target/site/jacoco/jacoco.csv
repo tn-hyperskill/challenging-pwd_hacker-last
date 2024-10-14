@@ -5,6 +5,6 @@ Password Hacker,hacker.padlock,RotDial,15,0,0,0,4,0,3,0,3,0
 Password Hacker,hacker.padlock,Password,39,0,0,0,9,0,8,0,8,0
 Password Hacker,hacker.padlock,Password.new PeekableIterator() {...},78,0,4,0,22,0,7,0,5,0
 Password Hacker,hacker.util,Util,6,4,0,0,2,1,0,1,0,1
-Password Hacker,hacker.util,PeekingIterator,40,0,0,0,17,0,6,0,6,0
-Password Hacker,hacker.util,Converter,6,0,0,0,2,0,1,0,1,0
+Password Hacker,hacker.util,PeekingIterator,0,42,0,0,0,17,0,6,0,6
+Password Hacker,hacker.util,Converter,0,11,0,0,0,3,0,3,0,3
 Password Hacker,hacker.util,PeekableIterator,6,0,0,0,4,0,1,0,1,0

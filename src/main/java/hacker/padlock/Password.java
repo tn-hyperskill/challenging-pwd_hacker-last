@@ -73,7 +73,7 @@ public final class Password {
   }
 
   public static Stream<String> allCombsStream() {
-    return Converter.iterToSteam(allCombinations());
+    return Converter.iterToStream(allCombinations());
   }
 
   private static List<Character> constructAcceptedLetters() {

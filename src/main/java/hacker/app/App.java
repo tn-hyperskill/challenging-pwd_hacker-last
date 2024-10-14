@@ -26,7 +26,8 @@ public final class App {
       // Connect to a host and a port using the socket
       System.err.println("Connecting to server...");
       sock.connect(args.socketAddr());
-      sock.setSoTimeout(SO_TIMEOUT);  // Set a timeout to prevent indefinite waiting
+      sock.setSoTimeout(
+          SO_TIMEOUT);  // Set a timeout to prevent indefinite waiting
 
       System.err.println("Connected successfully. Sending message...");
 

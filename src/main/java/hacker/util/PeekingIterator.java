@@ -28,7 +28,7 @@ public final class PeekingIterator<T> implements PeekableIterator<T> {
   }
 
   @Override public boolean hasNext() {
-    return false;
+    return this.peeked.isPresent();
   }
 
   // CRUD-U
@@ -47,7 +47,7 @@ public final class PeekingIterator<T> implements PeekableIterator<T> {
   private void discardCurrentPeeked() {
     try {
       this.peeked = Optional.of(this.inner.next());
-    } catch (NoSuchElementException $) {
+    } catch (NoSuchElementException ignored) {
       this.peeked = Optional.empty();
     }
   }
