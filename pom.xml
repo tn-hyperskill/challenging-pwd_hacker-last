@@ -27,6 +27,7 @@
     <jxr.version>3.4.0</jxr.version>
     <!-- Plugin versions – Misc -->
     <compiler_plugin.version>3.13.0</compiler_plugin.version>
+    <jacoco.version>0.8.12</jacoco.version> <!-- JaCoCo version -->
   </properties>
 
   <dependencies>
@@ -54,7 +55,8 @@
         <version>${spotbugs.version}</version>
         <configuration>
           <failOnError>true</failOnError>
-          <excludeFilterFile>./static_anal/cfg/sb-exclude.xml</excludeFilterFile>
+          <excludeFilterFile>./static_anal/cfg/sb-exclude.xml
+          </excludeFilterFile>
         </configuration>
         <executions>
           <execution>
@@ -78,6 +80,7 @@
         </configuration>
         <executions>
           <execution>
+            <id>pmd-check</id>
             <phase>verify</phase>
             <goals>
               <goal>check</goal>
@@ -123,6 +126,19 @@
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <version>${project-info-reports.version}</version>
       </plugin>
+      <!-- JaCoCo plugin -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
@@ -134,7 +150,8 @@
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${spotbugs.version}</version>
         <configuration>
-          <excludeFilterFile>./static_anal/cfg/sb-exclude.xml</excludeFilterFile>
+          <excludeFilterFile>./static_anal/cfg/sb-exclude.xml
+          </excludeFilterFile>
         </configuration>
       </plugin>
       <!-- Static analysers – PMD -->
@@ -168,6 +185,19 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>
         <version>${jxr.version}</version>
+      </plugin>
+      <!-- JaCoCo report for site generation -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco.version}</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
       </plugin>
     </plugins>
   </reporting>
