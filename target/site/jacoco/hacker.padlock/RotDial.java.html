@@ -14,13 +14,13 @@ public final class RotDial {
   // CRUD-R
 
   public static PeekingIterator&lt;Character&gt; construct() {
-<span class="nc" id="L17">    return new PeekingIterator&lt;&gt;(Password.ACCEPTED_CHARS.iterator());</span>
+<span class="fc" id="L17">    return new PeekingIterator&lt;&gt;(Password.ACCEPTED_CHARS.iterator());</span>
   }
 
   public static List&lt;PeekingIterator&lt;Character&gt;&gt; constructDialsAsm(int count) {
-<span class="nc" id="L21">    return IntStream.range(0, count)</span>
-<span class="nc" id="L22">        .mapToObj(_idx -&gt; construct())</span>
-<span class="nc" id="L23">        .toList();</span>
+<span class="fc" id="L21">    return IntStream.range(0, count)</span>
+<span class="fc" id="L22">        .mapToObj(_idx -&gt; construct())</span>
+<span class="fc" id="L23">        .toList();</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

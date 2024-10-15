@@ -14,14 +14,20 @@ public final class Converter {
 
   // CRUD-R
 
-  public static &lt;T&gt; Stream&lt;T&gt; iterToStream(Iterator&lt;T&gt; iterator) {
+  public static &lt;T&gt; Stream&lt;T&gt; toStream(Iterator&lt;T&gt; iterator) {
 <span class="fc" id="L18">    return StreamSupport.stream(</span>
 <span class="fc" id="L19">        Spliterators.spliteratorUnknownSize(iterator, 0),</span>
         false);
   }
+  public static &lt;T&gt; Stream&lt;T&gt; toStream(Iterable&lt;T&gt; iterable) {
+<span class="fc" id="L23">    return toStream(iterable.iterator());</span>
+  }
 
-  public static &lt;T&gt; Iterable&lt;T&gt; iterToIterable(Iterator&lt;T&gt; iterator) {
-<span class="fc" id="L24">    return () -&gt; iterator;</span>
+  public static &lt;T&gt; Iterable&lt;T&gt; toIterable(Iterator&lt;T&gt; iterator) {
+<span class="fc" id="L27">    return () -&gt; iterator;</span>
+  }
+  public static &lt;T&gt; Iterable&lt;T&gt; toIterable(Stream&lt;T&gt; stream) {
+<span class="fc" id="L30">    return stream::iterator;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

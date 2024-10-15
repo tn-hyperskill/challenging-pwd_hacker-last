@@ -36,7 +36,7 @@ public final class App {
 <span class="nc" id="L36">      try (var dataOut = new DataOutputStream(sock.getOutputStream());</span>
 <span class="nc" id="L37">          var dataIn = new DataInputStream(sock.getInputStream())) {</span>
 
-<span class="nc bnc" id="L39" title="All 2 branches missed.">        for (var combIter = Password.allCombinations(); combIter.hasNext();</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        for (var combIter = Password.allCombsPIter(); combIter.hasNext();</span>
 <span class="nc" id="L40">            combIter.discardNext()) {</span>
           try {
 <span class="nc" id="L42">            dataOut.writeUTF(combIter.peek());</span>

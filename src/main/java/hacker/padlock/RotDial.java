@@ -1,7 +1,9 @@
 package hacker.padlock;
 
 import hacker.util.PeekingIterator;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public final class RotDial {
@@ -20,6 +22,6 @@ public final class RotDial {
   public static List<PeekingIterator<Character>> constructDialsAsm(int count) {
     return IntStream.range(0, count)
         .mapToObj(_idx -> construct())
-        .toList();
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 }

@@ -22,16 +22,22 @@
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>    <em class="jxr_comment">// CRUD-R</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Stream&lt;T&gt; iterToStream(Iterator&lt;T&gt; iterator) {
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Stream&lt;T&gt; toStream(Iterator&lt;T&gt; iterator) {
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>      <strong class="jxr_keyword">return</strong> StreamSupport.stream(
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>          Spliterators.spliteratorUnknownSize(iterator, 0),
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>          false);
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>    }
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Iterable&lt;T&gt; iterToIterable(Iterator&lt;T&gt; iterator) {
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>      <strong class="jxr_keyword">return</strong> () -&gt; iterator;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>    }
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  }
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Stream&lt;T&gt; toStream(Iterable&lt;T&gt; iterable) {
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>      <strong class="jxr_keyword">return</strong> toStream(iterable.iterator());
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>    }
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Iterable&lt;T&gt; toIterable(Iterator&lt;T&gt; iterator) {
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>      <strong class="jxr_keyword">return</strong> () -&gt; iterator;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>    }
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Iterable&lt;T&gt; toIterable(Stream&lt;T&gt; stream) {
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>      <strong class="jxr_keyword">return</strong> stream::iterator;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>    }
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2024. All rights reserved.</div>
