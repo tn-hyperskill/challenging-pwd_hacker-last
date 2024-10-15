@@ -76,8 +76,8 @@ final class PeekingIteratorTest {
     PeekableIterator<Integer> pIter = new PeekingIterator<>(list.iterator());
     IntStream.range(0, discard_count).forEach(ignored -> pIter.discardNext());
     // Compare
-    assertIterableEquals(Converter.iterToIterable(stream.iterator()),
-        Converter.iterToIterable(pIter));
+    assertIterableEquals(Converter.toIterable(stream.iterator()),
+        Converter.toIterable(pIter));
   }
 
   @Test @DisplayName("`.next` throws on empty") void nextTc1() {

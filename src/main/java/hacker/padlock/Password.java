@@ -4,7 +4,6 @@ import hacker.util.Converter;
 import hacker.util.PeekableIterator;
 import hacker.util.PeekingIterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -23,8 +22,8 @@ public final class Password {
 
   // CRUD-R
 
-  public static PeekableIterator<String> allCombinations() {
-    return new PeekableIterator<String>() {
+  public static PeekableIterator<String> allCombsPIter() {
+    return new PeekableIterator<>() {
       // Instance fields
 
       private List<PeekingIterator<Character>> rotatingDials =
@@ -50,9 +49,10 @@ public final class Password {
         for (int firstDialToRotIdx = this.rotatingDials.size() - 1;
             0 <= firstDialToRotIdx; --firstDialToRotIdx) {
           var firstDialToRot = this.rotatingDials.get(firstDialToRotIdx);
-          try {
-            firstDialToRot.next(); // Rotating
-            // On successful rotation reset all trailing dials
+          firstDialToRot.discardNext(); // Rotating
+          // Making sure there is sth
+          if (firstDialToRot.hasNext()) {
+            // On successful/meaningful rotation reset all trailing dials
             for (int dialToResetIdx = firstDialToRotIdx + 1;
                 dialToResetIdx < this.rotatingDials.size();
                 dialToResetIdx++) {
@@ -60,8 +60,6 @@ public final class Password {
             }
             // Since rotation has been performed we can return a peeked value.
             return ret;
-          } catch (NoSuchElementException $) {
-            continue;
           }
         }
 
@@ -73,12 +71,14 @@ public final class Password {
   }
 
   public static Stream<String> allCombsStream() {
-    return Converter.iterToStream(allCombinations());
+    return Converter.toStream(allCombsPIter());
   }
 
   private static List<Character> constructAcceptedLetters() {
-    return Stream.concat(IntStream.rangeClosed('a', 'z').mapToObj(i -> i),
-            IntStream.rangeClosed('0', '9').mapToObj(i -> i))
-        .map(i -> (char) (int) i).toList();
+    return IntStream.concat(
+            IntStream.rangeClosed('a', 'z'),
+            IntStream.rangeClosed('0', '9')
+        ).mapToObj(i -> (char) i)
+        .toList();
   }
 }

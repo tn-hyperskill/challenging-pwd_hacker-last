@@ -36,7 +36,7 @@ public final class App {
       try (var dataOut = new DataOutputStream(sock.getOutputStream());
           var dataIn = new DataInputStream(sock.getInputStream())) {
 
-        for (var combIter = Password.allCombinations(); combIter.hasNext();
+        for (var combIter = Password.allCombsPIter(); combIter.hasNext();
             combIter.discardNext()) {
           try {
             dataOut.writeUTF(combIter.peek());
