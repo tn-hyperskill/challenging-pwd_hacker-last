@@ -1,9 +1,12 @@
 package hacker.padlock;
 
 import hacker.util.Converter;
-import hacker.util.PeekableIterator;
-import hacker.util.PeekingIterator;
+import hacker.util.iter.AutoclosableIterator;
+import hacker.util.iter.PeekableIterator;
+import hacker.util.iter.PeekingIterator;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -17,7 +20,7 @@ public final class Password {
 
   // CRUD-C
 
-  protected Password() {
+  private Password() {
   }
 
   // CRUD-R
@@ -80,5 +83,26 @@ public final class Password {
             IntStream.rangeClosed('0', '9')
         ).mapToObj(i -> (char) i)
         .toList();
+  }
+
+  public static AutoclosableIterator<String> typicalPwdIter() {
+    final Scanner pwdSource = new Scanner(
+        Password.class.getResourceAsStream("TypicalPwds.csv"),
+        StandardCharsets.UTF_8
+    );
+
+    return new AutoclosableIterator<>() {
+      @Override public void close() {
+        pwdSource.close();
+      }
+
+      @Override public boolean hasNext() {
+        return pwdSource.hasNextLine();
+      }
+
+      @Override public String next() {
+        return pwdSource.nextLine();
+      }
+    };
   }
 }

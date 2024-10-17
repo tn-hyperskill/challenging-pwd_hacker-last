@@ -1,4 +1,4 @@
-package hacker.util;
+package hacker.util.iter;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

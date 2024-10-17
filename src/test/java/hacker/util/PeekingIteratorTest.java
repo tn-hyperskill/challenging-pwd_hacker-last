@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import hacker.util.iter.PeekableIterator;
+import hacker.util.iter.PeekingIterator;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;

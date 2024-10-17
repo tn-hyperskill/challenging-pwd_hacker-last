@@ -1,4 +1,4 @@
-package hacker.util;
+package hacker.util.iter;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Iterator;
