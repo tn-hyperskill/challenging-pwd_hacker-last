@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>PeekingIterator xref</title>
-<link type="text/css" rel="stylesheet" href="../../stylesheet.css" />
+<link type="text/css" rel="stylesheet" href="../../../stylesheet.css" />
 </head>
 <body>
-<div id="overview"><a href="../../../apidocs/hacker/util/PeekingIterator.html">View Javadoc</a></div><pre>
-<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> hacker.util;
+<div id="overview"><a href="../../../../apidocs/hacker/util/iter/PeekingIterator.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> hacker.util.iter;
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.util.Iterator;
@@ -23,7 +23,7 @@
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>    <em class="jxr_comment">// CRUD-C</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>    @SuppressFBWarnings(<span class="jxr_string">"EI"</span>)
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>    <strong class="jxr_keyword">public</strong> <a name="PeekingIterator" href="../../hacker/util/PeekingIterator.html#PeekingIterator">PeekingIterator</a>(Iterator&lt;T&gt; <strong class="jxr_keyword">inner</strong>) {
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>    <strong class="jxr_keyword">public</strong> <a name="PeekingIterator" href="../../../hacker/util/iter/PeekingIterator.html#PeekingIterator">PeekingIterator</a>(Iterator&lt;T&gt; <strong class="jxr_keyword">inner</strong>) {
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>      <strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong> = <strong class="jxr_keyword">inner</strong>;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>      <strong class="jxr_keyword">this</strong>.peeked = Optional.empty();
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>      <strong class="jxr_keyword">this</strong>.discardCurrentPeeked();

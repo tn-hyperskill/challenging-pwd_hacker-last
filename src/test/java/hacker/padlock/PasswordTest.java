@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 import hacker.util.Converter;
-import hacker.util.iter.AutoclosableIterator;
+import hacker.util.iter.AutoClosableIterator;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -19,6 +19,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 final class PasswordTest {
 
@@ -36,44 +37,83 @@ final class PasswordTest {
     );
   }
 
-  @Test
-  void allCombsStream_1stProducesSingleChars() {
-    var singleChars = Password.ACCEPTED_CHARS.stream().map(Object::toString);
-    var firstChars =
-        Password.allCombsStream().limit(Password.ACCEPTED_CHARS.size());
+  @Nested class AllCombsStream {
 
-    assertIterableEquals(Converter.toIterable(singleChars),
-        Converter.toIterable(firstChars));
-  }
+    @Test
+    void firstProducesSingleChars() {
+      var singleChars = Password.ACCEPTED_CHARS.stream().map(Object::toString);
+      var firstChars =
+          Password.allCombsStream().limit(Password.ACCEPTED_CHARS.size());
 
-  @Test
-  void allCombsStream_producesDoubleCharsAfterSingles() {
+      assertIterableEquals(Converter.toIterable(singleChars),
+          Converter.toIterable(firstChars));
+    }
 
-    var firstChars =
-        Password.allCombsStream().skip(Password.ACCEPTED_CHARS.size()).limit(3);
+    @Test
+    void producesDoubleCharsAfterSingles() {
 
-    assertIterableEquals(List.of("aa", "ab", "ac"),
-        Converter.toIterable(firstChars));
+      var firstChars =
+          Password.allCombsStream().skip(Password.ACCEPTED_CHARS.size())
+              .limit(3);
+
+      assertIterableEquals(List.of("aa", "ab", "ac"),
+          Converter.toIterable(firstChars));
+    }
   }
 
   @Nested @TestInstance(Lifecycle.PER_CLASS)
-  public class TypicalPwdIter {
+  class CasefulTypicalPwdIter {
 
-    private AutoclosableIterator<String> typicalPwdIter;
+    private AutoClosableIterator<String> theIter;
 
     @BeforeAll
     void setup() {
-      this.typicalPwdIter = Password.typicalPwdIter();
+      this.theIter = Password.casefulTypicalPwdsIter();
     }
 
     @AfterAll
     void teardown() throws Exception {
-      this.typicalPwdIter.close();
+      this.theIter.close();
     }
 
-    @ParameterizedTest @CsvFileSource(resources = "/hacker/padlock/TypicalPwds.csv")
-    void typicalPwdIter(String expectedPwd) {
-      assertEquals(expectedPwd, typicalPwdIter.next());
+    @ParameterizedTest @ValueSource(strings = {
+        "123456", "123456", "123456", "123456", "123456", "123456",
+        "123456", "123456", "123456", "123456", "123456", "123456",
+        "123456", "123456", "123456", "123456", "123456", "123456",
+        "123456", "123456", "123456", "123456", "123456", "123456",
+        "123456", "123456", "123456", "123456", "123456", "123456",
+        "123456", "123456", "123456", "123456", "123456", "123456",
+        "123456", "123456", "123456", "123456", "123456", "123456",
+        "123456", "123456", "123456", "123456", "123456", "123456",
+        "123456", "123456", "123456", "123456", "123456", "123456",
+        "123456", "123456", "123456", "123456", "123456", "123456",
+        "123456", "123456", "123456", "123456",
+        "password", "Password", "pAssword", "PAssword", "paSsword",
+        "PaSsword"})
+    void next(String expectedPwd) {
+      assertEquals(expectedPwd, theIter.next());
+    }
+  }
+
+  @Nested @TestInstance(Lifecycle.PER_CLASS)
+  class TypicalPwdIter {
+
+    private AutoClosableIterator<String> theIter;
+
+    @BeforeAll
+    void setup() {
+      this.theIter = Password.typicalPwdsIter();
+    }
+
+    @AfterAll
+    void teardown() throws Exception {
+      this.theIter.close();
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/hacker/padlock/TypicalPwds.csv")
+    void next(String expectedPwd) {
+      assertEquals(expectedPwd, theIter.next());
     }
   }
 

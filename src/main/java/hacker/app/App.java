@@ -34,30 +34,29 @@ public final class App {
       // Send a message from the third command line argument to the host
       // using the socket
       try (var dataOut = new DataOutputStream(sock.getOutputStream());
-          var dataIn = new DataInputStream(sock.getInputStream())) {
-
-        for (var combIter = Password.allCombsPIter(); combIter.hasNext();
-            combIter.discardNext()) {
+          var dataIn = new DataInputStream(sock.getInputStream());
+          var pwdsIter = Password.typicalPwdsIter()) {
+        while (pwdsIter.hasNext()) {
           try {
-            dataOut.writeUTF(combIter.peek());
+            String curPwd = pwdsIter.next();
+            dataOut.writeUTF(curPwd);
             dataOut.flush();
 
             String response = dataIn.readUTF();
             if (response.equals("Connection success!")) {
-              System.out.println(combIter.peek());
+              System.out.println(curPwd);
               break;
             }
           } catch (IOException e) {
             throw new RuntimeException(e);
           }
         }
-
-
       } catch (IOException e) {
         System.err.println("Error during communication: " + e.getMessage());
       }
 
-    } catch (IOException e) {
+    } catch (
+        IOException e) {
       System.err.println("Connection error: " + e.getMessage());
     }
   }

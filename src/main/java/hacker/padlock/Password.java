@@ -1,11 +1,13 @@
 package hacker.padlock;
 
 import hacker.util.Converter;
-import hacker.util.iter.AutoclosableIterator;
+import hacker.util.iter.AutoClosableIterator;
+import hacker.util.iter.AutoClosableLinesIterator;
 import hacker.util.iter.PeekableIterator;
 import hacker.util.iter.PeekingIterator;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -85,24 +87,75 @@ public final class Password {
         .toList();
   }
 
-  public static AutoclosableIterator<String> typicalPwdIter() {
+  /**
+   * <h6>Caseful Typical-Password Iterator</h6>
+   * Caseful – having all possible combination of letter's case.
+   */
+  public static AutoClosableIterator<String> casefulTypicalPwdsIter() {
+    AutoClosableLinesIterator typicalPwdAutoClosableIter = typicalPwdsIter();
+    PeekableIterator<String> typicalPwdPeekableIter =
+        new PeekingIterator<>(typicalPwdAutoClosableIter);
+
+    return new AutoClosableIterator<>() {
+      final PeekableIterator<String> typicalPwdIter = typicalPwdPeekableIter;
+      final AutoCloseable internalAutoClosableRes = typicalPwdAutoClosableIter;
+      long currentVariation = 0;
+
+      @Override public void close() throws Exception {
+        this.internalAutoClosableRes.close();
+      }
+
+      @Override public boolean hasNext() {
+        return this.typicalPwdIter.hasNext();
+      }
+
+      @Override public String next() {
+        // Stop condition
+        if (!this.hasNext()) {
+          throw new NoSuchElementException();
+        }
+        // Preparation of the outputted value.
+        // Preparation: Constants
+        final String curCaselessPwd = this.typicalPwdIter.peek();
+        final long lastVariation = lastVariation(curCaselessPwd);
+        // Preparation: IO
+        var curCaselessPwdChars = curCaselessPwd.chars().mapToObj(integer -> (char) integer).iterator();
+        var out = new StringBuilder(curCaselessPwd.length());
+        // Preparation: Loop
+        for (long bitMask = 1; bitMask <= lastVariation; bitMask <<= 1) {
+          var currChar = curCaselessPwdChars.next();
+          boolean curBit = (this.currentVariation & bitMask) != 0;
+          out.append(curBit ? Character.toUpperCase(currChar)
+              : Character.toLowerCase(currChar));
+        }
+        // The inner's `.next()` condition
+        if (this.currentVariation == lastVariation) {
+          this.typicalPwdIter.discardNext();
+          this.currentVariation = 0;
+        } else {
+          this.currentVariation++;
+        }
+
+        return out.toString();
+      }
+
+      private static long lastVariation(String caselessPwd) {
+        return (1 << caselessPwd.length()) - 1;
+      }
+    };
+  }
+
+  /**
+   * <h6>Typical-Password Iterator</h6>
+   *
+   * @return iterator over typical passwords used by humans
+   */
+  public static AutoClosableLinesIterator typicalPwdsIter() {
     final Scanner pwdSource = new Scanner(
         Password.class.getResourceAsStream("TypicalPwds.csv"),
         StandardCharsets.UTF_8
     );
 
-    return new AutoclosableIterator<>() {
-      @Override public void close() {
-        pwdSource.close();
-      }
-
-      @Override public boolean hasNext() {
-        return pwdSource.hasNextLine();
-      }
-
-      @Override public String next() {
-        return pwdSource.nextLine();
-      }
-    };
+    return new AutoClosableLinesIterator(pwdSource);
   }
 }
