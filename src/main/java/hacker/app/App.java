@@ -1,6 +1,6 @@
 package hacker.app;
 
-import hacker.padlock.Password;
+import hacker.auth.Password;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -29,13 +29,13 @@ public final class App {
       sock.setSoTimeout(
           SO_TIMEOUT);  // Set a timeout to prevent indefinite waiting
 
-      System.err.println("Connected successfully. Sending message...");
+      System.err.println("Connected successfully. Sending result...");
 
-      // Send a message from the third command line argument to the host
+      // Send a result from the third command line argument to the host
       // using the socket
       try (var dataOut = new DataOutputStream(sock.getOutputStream());
           var dataIn = new DataInputStream(sock.getInputStream());
-          var pwdsIter = Password.typicalPwdsIter()) {
+          var pwdsIter = Password.casefulTypicalPwdsIter()) {
         while (pwdsIter.hasNext()) {
           try {
             String curPwd = pwdsIter.next();
@@ -47,11 +47,11 @@ public final class App {
               System.out.println(curPwd);
               break;
             }
-          } catch (IOException e) {
+          } catch (Exception e) {
             throw new RuntimeException(e);
           }
         }
-      } catch (IOException e) {
+      } catch (Exception e) {
         System.err.println("Error during communication: " + e.getMessage());
       }
 

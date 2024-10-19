@@ -1,4 +1,4 @@
-package hacker.padlock;
+package hacker.auth;
 
 import hacker.util.iter.PeekingIterator;
 import java.util.ArrayList;

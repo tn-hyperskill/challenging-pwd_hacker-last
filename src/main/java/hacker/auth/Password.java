@@ -1,4 +1,4 @@
-package hacker.padlock;
+package hacker.auth;
 
 import hacker.util.Converter;
 import hacker.util.iter.AutoClosableIterator;
@@ -140,7 +140,7 @@ public final class Password {
       }
 
       private static long lastVariation(String caselessPwd) {
-        return (1 << caselessPwd.length()) - 1;
+        return (1L << caselessPwd.length()) - 1L;
       }
     };
   }

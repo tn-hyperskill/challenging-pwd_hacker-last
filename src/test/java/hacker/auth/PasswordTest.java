@@ -1,4 +1,4 @@
-package hacker.padlock;
+package hacker.auth;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
@@ -111,7 +111,7 @@ final class PasswordTest {
     }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "/hacker/padlock/TypicalPwds.csv")
+    @CsvFileSource(resources = "/hacker/auth/TypicalPwds.csv")
     void next(String expectedPwd) {
       assertEquals(expectedPwd, theIter.next());
     }

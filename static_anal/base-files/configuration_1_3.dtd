@@ -39,13 +39,13 @@
    Can be used to replace some generic Checkstyle messages with a custom
    messages.
 
-   The 'key' attribute specifies for which actual Checkstyle message the
-   replacing should occur, look into Checkstyle's message.properties for
-   the according message keys.
+   The 'key' attribute specifies for which actual Checkstyle result the
+   replacing should occur, look into Checkstyle's result.properties for
+   the according result keys.
 
-   The 'value' attribute defines the custom message patterns including
-   message parameter placeholders as defined in the original Checkstyle
-   messages (again see message.properties for reference).
+   The 'value' attribute defines the custom result patterns including
+   result parameter placeholders as defined in the original Checkstyle
+   messages (again see result.properties for reference).
 -->
 <!ELEMENT message EMPTY>
 <!ATTLIST message
