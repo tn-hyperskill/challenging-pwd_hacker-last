@@ -35,7 +35,8 @@ final class ConverterTest {
   }
 
   @ParameterizedTest @MethodSource("provideDiverseLists")
-  @DisplayName("`.toIterable(iterable.iterator())` is identity (mathematically)")
+  @DisplayName(
+      "`.toIterable(iterable.iterator())` is identity (mathematically)")
   void toIterable_Iterable$iterator(List<Integer> list) {
     var conversions_count = (int) (Math.random() * 20.0);
 
@@ -65,4 +66,4 @@ final class ConverterTest {
   private static Stream<List<Integer>> provideDiverseLists() {
     return TestingUtil.provideDiverseLists();
   }
- }
+}

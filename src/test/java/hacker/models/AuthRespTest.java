@@ -13,6 +13,6 @@ final class AuthRespTest {
             "result": "Wrong login!"
         }
         """);
-    assertEquals("Wrong login!", authResp.result());
+    assertEquals("Wrong login!", authResp.message());
   }
 }

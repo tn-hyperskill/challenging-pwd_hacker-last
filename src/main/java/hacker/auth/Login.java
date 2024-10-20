@@ -21,7 +21,6 @@ public final class Login {
     return new AutoClosableLinesIterator(pwdSource);
   }
 
-
   // CRUD-R
 
 }

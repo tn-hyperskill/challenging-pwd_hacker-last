@@ -19,6 +19,7 @@ public final class Converter {
         Spliterators.spliteratorUnknownSize(iterator, 0),
         false);
   }
+
   public static <T> Stream<T> toStream(Iterable<T> iterable) {
     return toStream(iterable.iterator());
   }
@@ -26,6 +27,7 @@ public final class Converter {
   public static <T> Iterable<T> toIterable(Iterator<T> iterator) {
     return () -> iterator;
   }
+
   public static <T> Iterable<T> toIterable(Stream<T> stream) {
     return stream::iterator;
   }

