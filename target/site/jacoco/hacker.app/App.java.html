@@ -64,7 +64,7 @@ import java.util.stream.Collectors;
 <span class="nc" id="L64">              crackedCredentials.withPassword(curPwd));</span>
 <span class="nc bnc" id="L65" title="All 4 branches missed.">          switch (response.message()) {</span>
             case &quot;Wrong password!&quot;:
-<span class="nc" id="L67">              padlock.get(padlock.size()-1).next();</span>
+<span class="nc" id="L67">              padlock.get(padlock.size() - 1).next();</span>
 <span class="nc" id="L68">              break;</span>
             case &quot;Exception happened during login&quot;:
               // Found the first characters

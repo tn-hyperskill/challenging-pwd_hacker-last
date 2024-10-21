@@ -80,10 +80,12 @@ public final class Password {
   }
 
   private static List<Character> constructAcceptedLetters() {
-    return IntStream.concat(
+    return Stream.of(
             IntStream.rangeClosed('a', 'z'),
+            IntStream.rangeClosed('A', 'Z'),
             IntStream.rangeClosed('0', '9')
-        ).mapToObj(i -> (char) i)
+        ).reduce(IntStream.empty(), IntStream::concat)
+        .mapToObj(i -> (char) i)
         .toList();
   }
 

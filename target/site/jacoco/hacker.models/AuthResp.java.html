@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 <span class="fc" id="L12">    var matcher = JSON_RE_PATTERN.matcher(json);</span>
 <span class="pc bpc" id="L13" title="1 of 2 branches missed.">    if (matcher.matches()) {</span>
 <span class="fc" id="L14">      return new AuthResp(matcher.group(&quot;result&quot;));</span>
-    }else{
+    } else {
 <span class="nc" id="L16">      throw new IllegalArgumentException(&quot;Invalid JSON: &quot; + json);</span>
     }
   }

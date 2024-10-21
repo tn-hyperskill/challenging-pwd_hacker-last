@@ -19,15 +19,17 @@ public final class Converter {
 <span class="fc" id="L19">        Spliterators.spliteratorUnknownSize(iterator, 0),</span>
         false);
   }
+
   public static &lt;T&gt; Stream&lt;T&gt; toStream(Iterable&lt;T&gt; iterable) {
-<span class="fc" id="L23">    return toStream(iterable.iterator());</span>
+<span class="fc" id="L24">    return toStream(iterable.iterator());</span>
   }
 
   public static &lt;T&gt; Iterable&lt;T&gt; toIterable(Iterator&lt;T&gt; iterator) {
-<span class="fc" id="L27">    return () -&gt; iterator;</span>
+<span class="fc" id="L28">    return () -&gt; iterator;</span>
   }
+
   public static &lt;T&gt; Iterable&lt;T&gt; toIterable(Stream&lt;T&gt; stream) {
-<span class="fc" id="L30">    return stream::iterator;</span>
+<span class="fc" id="L32">    return stream::iterator;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
