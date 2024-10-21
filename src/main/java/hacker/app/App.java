@@ -26,18 +26,18 @@ public final class App {
     }
   }
 
-  private static Socket establishConnectionWithServer () throws IOException {
-      System.err.println("Connecting to server...");
-      var sock = new Socket();
-      // Connect to a host and a port using the socket
-      sock.connect(depMgr().appCfg().socketAddr());
-      sock.setSoTimeout(
-          Client.SO_TIMEOUT);  // Set a timeout to prevent indefinite waiting
-      System.err.println("Connected successfully.");
-      return sock;
-    }
-
-    public static DependencyManager depMgr () {
-      return DependencyManager.INSTANCE;
-    }
+  private static Socket establishConnectionWithServer() throws IOException {
+    System.err.println("Connecting to server...");
+    var sock = new Socket();
+    // Connect to a host and a port using the socket
+    sock.connect(depMgr().appCfg().socketAddr());
+    sock.setSoTimeout(
+        Client.SO_TIMEOUT);  // Set a timeout to prevent indefinite waiting
+    System.err.println("Connected successfully.");
+    return sock;
   }
+
+  public static DependencyManager depMgr() {
+    return DependencyManager.INSTANCE;
+  }
+}

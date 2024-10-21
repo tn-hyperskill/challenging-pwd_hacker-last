@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Login.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Password Hacker</a> &gt; <a href="index.source.html" class="el_package">hacker.auth</a> &gt; <span class="el_source">Login.java</span></div><h1>Login.java</h1><pre class="source lang-java linenums">package hacker.auth;
+
+import hacker.models.AuthResp;
+import hacker.models.UserCredentials;
+import hacker.util.iter.AutoClosableIterator;
+import hacker.util.iter.AutoClosableLinesIterator;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
+
+<span class="nc" id="L12">public final class Login {</span>
+
+  // CRUD-C
+
+  private Login() {
+  }
+
+  // CRUD-R
+
+  public static AutoClosableIterator&lt;String&gt; typicalLoginIter() {
+<span class="nc" id="L22">    final Scanner pwdSource = new Scanner(</span>
+<span class="nc" id="L23">        Password.class.getResourceAsStream(&quot;TypicalLogins.csv&quot;),</span>
+        StandardCharsets.UTF_8
+    );
+
+<span class="nc" id="L27">    return new AutoClosableLinesIterator(pwdSource);</span>
+  }
+
+  public static String crackByBruteForce(DataInputStream dataIn,
+      DataOutputStream dataOut) throws Exception {
+<span class="nc" id="L32">    try (var loginIter = Login.typicalLoginIter()) {</span>
+      while (true) {
+        // Login must be found before an exhaustion of the iterator.
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        assert loginIter.hasNext();</span>
+        // The loop state.
+<span class="nc" id="L37">        var curLogin = loginIter.next();</span>
+        // Brute-try the current login.
+<span class="nc" id="L39">        var authResp = Client.requestAuthentication(dataIn, dataOut,</span>
+            new UserCredentials(curLogin, null));
+        // The loop's stop condition
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (Login.wasCorrect(authResp)) {</span>
+<span class="nc" id="L43">          return curLogin;</span>
+        }
+<span class="nc" id="L45">      }</span>
+    }
+  }
+
+  private static boolean wasCorrect(AuthResp authResp) {
+<span class="nc bnc" id="L50" title="All 2 branches missed.">    return !authResp.message().equals(&quot;Wrong login!&quot;);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

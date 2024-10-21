@@ -67,7 +67,8 @@ public final class Password {
     };
   }
 
-  private static void patchPadlockState(List<PeekingIterator<Character>> padlock,
+  private static void patchPadlockState(
+      List<PeekingIterator<Character>> padlock,
       AuthResult authResult) {
     final String usedPassword = displayEffectivePwd(padlock);
     if (authResult.wasTheUsedPwdAPrefixOfTheCorrectPwd()) {

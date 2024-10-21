@@ -33,9 +33,6 @@
   <suppress checks="LineLength" files="."/>
 
   <!-- Checkstyle misses -->
-  <suppress checks="MagicNumber" files=".*Test\.java"/>
-  <suppress checks="MagicNumber"
-    files="src/main/java/battleship/util/matrix/MatrixCoordinates.java"/>
-  <suppress checks="DesignForExtension" files="./src/main/java/battleship/shot/Shot(Hit|Damaged).java" />
+  <suppress checks="ConstantName" files="hacker.app.Log.java" />
 
 </suppressions>

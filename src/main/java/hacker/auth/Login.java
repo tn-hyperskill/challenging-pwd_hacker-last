@@ -1,6 +1,5 @@
 package hacker.auth;
 
-import hacker.app.Log;
 import hacker.models.AuthResp;
 import hacker.models.UserCredentials;
 import hacker.util.iter.AutoClosableIterator;
@@ -28,7 +27,8 @@ public final class Login {
     return new AutoClosableLinesIterator(pwdSource);
   }
 
-  public static String crackByBruteForce(DataInputStream dataIn, DataOutputStream dataOut) throws Exception {
+  public static String crackByBruteForce(DataInputStream dataIn,
+      DataOutputStream dataOut) throws Exception {
     try (var loginIter = Login.typicalLoginIter()) {
       while (true) {
         // Login must be found before an exhaustion of the iterator.

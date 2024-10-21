@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Client.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Password Hacker</a> &gt; <a href="index.source.html" class="el_package">hacker.auth</a> &gt; <span class="el_source">Client.java</span></div><h1>Client.java</h1><pre class="source lang-java linenums">package hacker.auth;
+
+import hacker.app.Log;
+import hacker.models.AuthResp;
+import hacker.models.UserCredentials;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+public final class Client {
+
+  public static final int SO_TIMEOUT = 5000;
+
+  // CRUD-C
+
+  private Client() {
+  }
+
+  // CRUD-R
+
+  public static AuthResult authenticate(
+      DataInputStream dataIn, DataOutputStream dataOut,
+      UserCredentials credentials) throws IOException {
+<span class="nc" id="L24">    var start = System.nanoTime();</span>
+<span class="nc" id="L25">    var response = Client.requestAuthentication(dataIn, dataOut, credentials);</span>
+<span class="nc" id="L26">    var reqNanoDuration = System.nanoTime() - start;</span>
+<span class="nc" id="L27">    return new AuthResult(response, reqNanoDuration);</span>
+  }
+
+  public static AuthResp requestAuthentication(
+      DataInputStream dataIn, DataOutputStream dataOut,
+      UserCredentials credentials) throws IOException {
+<span class="nc" id="L33">    dataOut.writeUTF(credentials.toJsonString());</span>
+<span class="nc" id="L34">    dataOut.flush();</span>
+
+<span class="nc" id="L36">    return AuthResp.fromJson(dataIn.readUTF());</span>
+  }
+
+  public static UserCredentials crackUserCredentials(
+      DataInputStream dataIn, DataOutputStream dataOut) throws Exception {
+<span class="nc" id="L41">    var crackedLogin = Login.crackByBruteForce(dataIn, dataOut);</span>
+<span class="nc" id="L42">    Log.login(crackedLogin);</span>
+<span class="nc" id="L43">    var crackedPassword =</span>
+<span class="nc" id="L44">        Password.crackUsingTimeVulnerability(dataIn, dataOut, crackedLogin);</span>
+<span class="nc" id="L45">    Log.password(crackedPassword);</span>
+<span class="nc" id="L46">    var crackedCredentials = new UserCredentials(</span>
+        crackedLogin,
+        crackedPassword
+    );
+<span class="nc" id="L50">    return crackedCredentials;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

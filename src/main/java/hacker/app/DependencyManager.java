@@ -4,7 +4,7 @@ import hacker.util.exceptions.SecondInitException;
 import hacker.util.exceptions.UninitPropException;
 import java.util.Optional;
 
-public final class DependencyManager{
+public final class DependencyManager {
 
   // Static fields
 
@@ -16,7 +16,8 @@ public final class DependencyManager{
 
   // CRUD-C
 
-  private DependencyManager() {}
+  private DependencyManager() {
+  }
 
   // CRUD-R
 
@@ -26,7 +27,7 @@ public final class DependencyManager{
 
   // CRUD-U
 
-  public void initAppCfg(AppCfg appCfg) throws SecondInitException{
+  public void initAppCfg(AppCfg appCfg) throws SecondInitException {
     if (this.appCfg.isPresent()) {
       throw new SecondInitException();
     }

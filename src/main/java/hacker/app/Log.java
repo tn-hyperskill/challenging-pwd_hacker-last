@@ -20,22 +20,23 @@ public final class Log {
     outStream.printf("`%s` = %s\n", name, value);
   }
 
-  public static void password(String value){
+  public static void password(String value) {
     property("password", value);
   }
 
-  public static void login(String value){
+  public static void login(String value) {
     property("login", value);
   }
+
   public static void passwordPrefix(String value) {
     property("password prefix", value);
   }
 
   public static void authResult(AuthResult authResult) {
     System.err.printf("Authentication took: %d. Password prefix was %s.\n",
-        authResult.durationInNano(),
-        authResult.wasTheUsedPwdAPrefixOfTheCorrectPwd() ?
-            "correct" : "incorrect"
+        authResult.durationInNanos(),
+        authResult.wasTheUsedPwdAPrefixOfTheCorrectPwd()
+            ? "correct" : "incorrect"
     );
   }
 }

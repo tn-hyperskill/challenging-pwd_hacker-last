@@ -2,8 +2,11 @@ package hacker.auth;
 
 import hacker.models.AuthResp;
 
-public record AuthResult(AuthResp response, long durationInNano) {
+public record AuthResult(AuthResp response, long durationInNanos) {
+
+  public static final int NANOS_IN_MILIS = 1_000_000;
+
   public boolean wasTheUsedPwdAPrefixOfTheCorrectPwd() {
-    return (this.durationInNano() / 1_000_000) > 0;
+    return (this.durationInNanos() / NANOS_IN_MILIS) > 0;
   }
 }
