@@ -3,11 +3,11 @@ package hacker.util;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public final class Util {
+public final class Cloner {
 
   // CRUD-C
 
-  private Util() {
+  private Cloner() {
   }
 
   // CRUD-R

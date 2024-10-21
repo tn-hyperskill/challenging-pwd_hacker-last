@@ -6,12 +6,12 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import org.junit.jupiter.api.Test;
 
-final class UtilTest {
+final class ClonerTest {
 
   @Test
   void testCloneInetAddr() throws UnknownHostException {
     InetAddress $old = InetAddress.getByName("google.com");
-    InetAddress $new = Util.clone($old);
+    InetAddress $new = Cloner.clone($old);
 
     assertEquals($old, $new);
   }

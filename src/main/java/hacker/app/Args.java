@@ -1,12 +1,12 @@
 package hacker.app;
 
-import hacker.util.Util;
+import hacker.util.Cloner;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
 
-public final class Args {
+public final class Args implements AppCfg {
 
   // Instance fields
 
@@ -26,21 +26,21 @@ public final class Args {
   }
 
   public Args(InetAddress ipAddr, int socketPort) throws UnknownHostException {
-    this.ipAddr = Util.clone(ipAddr);
+    this.ipAddr = Cloner.clone(ipAddr);
     this.socketPort = socketPort;
   }
 
   // CRUD-R: Properties
 
-  public SocketAddress socketAddr() {
+  @Override public SocketAddress socketAddr() {
     return new InetSocketAddress(this.ipAddr(), this.port());
   }
 
-  public InetAddress ipAddr() {
-    return Util.clone(this.ipAddr);
+  @Override public InetAddress ipAddr() {
+    return Cloner.clone(this.ipAddr);
   }
 
-  public int port() {
+  @Override public int port() {
     return this.socketPort;
   }
 }

