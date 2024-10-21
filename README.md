@@ -28,7 +28,7 @@ git clone https://gitlab.griddynamics.net/pl-java-internship-2024-q3/tnehring_ch
 
 ```bash
 cd tnehring_challenging_pwd-hacker_last
-./mvnw clean compile exec:java -Dexec.mainClass="battleship.Main"
+./mvnw clean compile exec:java -Dexec.mainClass="hacker.app.App"
 ```
 
 ## Unit tests
@@ -65,7 +65,7 @@ overridable methods. Other code items may not be covered.
 ### How does app work?
 
 If you want to know, feel free to browse the source code
-from `Main.main` down the invocation tree.
+from `App.main` down the invocation tree.
 
 
 [jb_academy]: https://plugins.jetbrains.com/plugin/10081-jetbrains-academy
