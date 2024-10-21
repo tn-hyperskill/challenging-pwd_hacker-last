@@ -74,4 +74,4 @@ from `Main.main` down the invocation tree.
 
 [proj_on_hyperskill]: https://hyperskill.org/projects/329
 
-[parent_repo]: https://gitlab.griddynamics.net/pl-java-internship-2024-q3/tnehring_challenging_pwd-hacker/
+[parent_repo]: https://gitlab.griddynamics.net/tnehring/tnehring_challenging_pwd-hacker

