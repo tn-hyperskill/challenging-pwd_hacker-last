@@ -25,15 +25,15 @@ final class PasswordTest {
 
   public static final int PWD_COMBS_ARBITRARY_COUNT_LIMIT = 50;
   private static final Pattern ACCEPTED_CHARS_LIST_PATTERN =
-      Pattern.compile("^a[b-y]{24}z0[1-8]{8}9$");
+      Pattern.compile("^[A-Za-z]{52}0[1-8]{8}9$");
 
   @Test
   void acceptedLetters() {
+    String acceptedCharsInStr = Password.ACCEPTED_CHARS.stream()
+        .map(Object::toString).collect(Collectors.joining());
     Assertions.assertTrue(
-        ACCEPTED_CHARS_LIST_PATTERN.matcher(
-            Password.ACCEPTED_CHARS.stream()
-                .map(Object::toString).collect(Collectors.joining())
-        ).matches()
+        ACCEPTED_CHARS_LIST_PATTERN.matcher(acceptedCharsInStr).matches(),
+        acceptedCharsInStr + " doesn't match the expected pattern"
     );
   }
 

@@ -7,8 +7,11 @@ import hacker.util.iter.AutoClosableIterator;
 import hacker.util.iter.AutoClosableLinesIterator;
 import hacker.util.iter.PeekableIterator;
 import hacker.util.iter.PeekingIterator;
+import java.io.DataInput;
 import java.io.DataInputStream;
+import java.io.DataOutput;
 import java.io.DataOutputStream;
+import java.io.Flushable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -32,8 +35,8 @@ public final class Password {
 
   // CRUD-R
 
-  public static String crackUsingTimeVulnerability(
-      final DataInputStream dataIn, final DataOutputStream dataOut,
+  public static <O extends Flushable & DataOutput> String crackUsingTimeVulnerability(
+      final DataInput dataIn, final O dataOut,
       String login) throws IOException {
     // Loop state
     var padlock = RotDial.constructDialsAsm(1); // Dials used for cracking.

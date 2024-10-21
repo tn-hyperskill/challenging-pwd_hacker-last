@@ -16,4 +16,12 @@ public record AuthResp(String message) {
       throw new IllegalArgumentException("Invalid JSON: " + json);
     }
   }
+
+  public String toJsonString() {
+    return """
+        {
+          "result": "%s"
+        }
+        """.formatted(message);
+  }
 }

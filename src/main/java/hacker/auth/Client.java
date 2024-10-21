@@ -3,8 +3,9 @@ package hacker.auth;
 import hacker.app.Log;
 import hacker.models.AuthResp;
 import hacker.models.UserCredentials;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.Flushable;
 import java.io.IOException;
 
 public final class Client {
@@ -18,8 +19,8 @@ public final class Client {
 
   // CRUD-R
 
-  public static AuthResult authenticate(
-      DataInputStream dataIn, DataOutputStream dataOut,
+  public static <O extends Flushable & DataOutput> AuthResult authenticate(
+      DataInput dataIn, O dataOut,
       UserCredentials credentials) throws IOException {
     var start = System.nanoTime();
     var response = Client.requestAuthentication(dataIn, dataOut, credentials);
@@ -27,8 +28,8 @@ public final class Client {
     return new AuthResult(response, reqNanoDuration);
   }
 
-  public static AuthResp requestAuthentication(
-      DataInputStream dataIn, DataOutputStream dataOut,
+  public static <O extends Flushable & DataOutput> AuthResp requestAuthentication(
+      DataInput dataIn, O dataOut,
       UserCredentials credentials) throws IOException {
     dataOut.writeUTF(credentials.toJsonString());
     dataOut.flush();
@@ -36,17 +37,14 @@ public final class Client {
     return AuthResp.fromJson(dataIn.readUTF());
   }
 
-  public static UserCredentials crackUserCredentials(
-      DataInputStream dataIn, DataOutputStream dataOut) throws Exception {
+  public static <O extends Flushable & DataOutput> UserCredentials crackUserCredentials(
+      DataInput dataIn, O dataOut) throws Exception {
     var crackedLogin = Login.crackByBruteForce(dataIn, dataOut);
     Log.login(crackedLogin);
     var crackedPassword =
         Password.crackUsingTimeVulnerability(dataIn, dataOut, crackedLogin);
     Log.password(crackedPassword);
-    var crackedCredentials = new UserCredentials(
-        crackedLogin,
-        crackedPassword
-    );
+    var crackedCredentials = new UserCredentials(crackedLogin, crackedPassword);
     return crackedCredentials;
   }
 }

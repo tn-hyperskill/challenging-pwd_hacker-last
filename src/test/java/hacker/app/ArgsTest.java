@@ -1,14 +1,22 @@
 package hacker.app;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
+import java.util.List;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 final class ArgsTest {
+
+  // Fields
 
   private static final String ipAddrStr = "127.0.0.1";
   private static final int socketPort = 8080;
@@ -17,8 +25,16 @@ final class ArgsTest {
 
   private static final Args args = constructArgs();
 
+  // Test methods
 
   @Test
+  void testParse() {
+    var executables = Stream.<Executable>of(() -> args.parse(), () -> args.parse("127.0.0.1"));
+    assertAll(executables.map(exec -> () -> assertThrows(Exception.class, exec)));
+  }
+
+  @Test
+  @DisplayName("`.parse` takes exactly 2 args")
   void parse() {
     Args parsed = null;
     try {

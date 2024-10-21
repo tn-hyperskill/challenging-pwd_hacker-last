@@ -33,7 +33,7 @@ public final class Log {
   }
 
   public static void authResult(AuthResult authResult) {
-    System.err.printf("Authentication took: %d. Password prefix was %s.\n",
+    outStream.printf("Authentication took: %d. Password prefix was %s.\n",
         authResult.durationInNanos(),
         authResult.wasTheUsedPwdAPrefixOfTheCorrectPwd()
             ? "correct" : "incorrect"

@@ -4,8 +4,11 @@ import hacker.models.AuthResp;
 import hacker.models.UserCredentials;
 import hacker.util.iter.AutoClosableIterator;
 import hacker.util.iter.AutoClosableLinesIterator;
+import java.io.DataInput;
 import java.io.DataInputStream;
+import java.io.DataOutput;
 import java.io.DataOutputStream;
+import java.io.Flushable;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
@@ -27,8 +30,8 @@ public final class Login {
     return new AutoClosableLinesIterator(pwdSource);
   }
 
-  public static String crackByBruteForce(DataInputStream dataIn,
-      DataOutputStream dataOut) throws Exception {
+  public static <O extends Flushable & DataOutput> String crackByBruteForce(
+      DataInput dataIn, O dataOut) throws Exception {
     try (var loginIter = Login.typicalLoginIter()) {
       while (true) {
         // Login must be found before an exhaustion of the iterator.
@@ -46,7 +49,10 @@ public final class Login {
     }
   }
 
-  private static boolean wasCorrect(AuthResp authResp) {
-    return !authResp.message().equals("Wrong login!");
+  public static boolean wasCorrect(AuthResp authResp) {
+    return switch (authResp.message()){
+      case "Wrong login!", "Bad request!"-> false;
+      default -> true;
+    };
   }
 }
