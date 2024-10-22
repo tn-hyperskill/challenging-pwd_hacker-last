@@ -37,11 +37,11 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>    }
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> passwordPrefix(String value) {
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>      property(<span class="jxr_string">"password prefix"</span>, value);
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_comment">//    property("password prefix", value);</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>    }
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> authResult(<a name="AuthResult" href="../../hacker/auth/AuthResult.html#AuthResult">AuthResult</a> authResult) {
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>      System.err.printf(<span class="jxr_string">"Authentication took: %d. Password prefix was %s.\n"</span>,
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      outStream.printf(<span class="jxr_string">"Authentication took: %d. Password prefix was %s.\n"</span>,
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>          authResult.durationInNanos(),
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>          authResult.wasTheUsedPwdAPrefixOfTheCorrectPwd()
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>              ? <span class="jxr_string">"correct"</span> : <span class="jxr_string">"incorrect"</span>

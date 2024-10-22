@@ -8,7 +8,6 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
-import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,8 +28,10 @@ final class ArgsTest {
 
   @Test
   void testParse() {
-    var executables = Stream.<Executable>of(() -> args.parse(), () -> args.parse("127.0.0.1"));
-    assertAll(executables.map(exec -> () -> assertThrows(Exception.class, exec)));
+    var executables = Stream.<Executable>of(() -> args.parse(),
+        () -> args.parse("127.0.0.1"));
+    assertAll(
+        executables.map(exec -> () -> assertThrows(Exception.class, exec)));
   }
 
   @Test

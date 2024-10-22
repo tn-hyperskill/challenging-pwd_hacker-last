@@ -29,7 +29,7 @@ public final class Log {
   }
 
   public static void passwordPrefix(String value) {
-    property("password prefix", value);
+//    property("password prefix", value);
   }
 
   public static void authResult(AuthResult authResult) {

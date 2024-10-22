@@ -4,12 +4,13 @@ import hacker.models.AuthResp;
 import hacker.models.UserCredentials;
 import hacker.util.iter.AutoClosableIterator;
 import hacker.util.iter.AutoClosableLinesIterator;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.Flushable;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
-<span class="nc" id="L12">public final class Login {</span>
+<span class="fc" id="L13">public final class Login {</span>
 
   // CRUD-C
 
@@ -19,35 +20,38 @@ import java.util.Scanner;
   // CRUD-R
 
   public static AutoClosableIterator&lt;String&gt; typicalLoginIter() {
-<span class="nc" id="L22">    final Scanner pwdSource = new Scanner(</span>
-<span class="nc" id="L23">        Password.class.getResourceAsStream(&quot;TypicalLogins.csv&quot;),</span>
+<span class="fc" id="L23">    final Scanner pwdSource = new Scanner(</span>
+<span class="fc" id="L24">        Password.class.getResourceAsStream(&quot;TypicalLogins.csv&quot;),</span>
         StandardCharsets.UTF_8
     );
 
-<span class="nc" id="L27">    return new AutoClosableLinesIterator(pwdSource);</span>
+<span class="fc" id="L28">    return new AutoClosableLinesIterator(pwdSource);</span>
   }
 
-  public static String crackByBruteForce(DataInputStream dataIn,
-      DataOutputStream dataOut) throws Exception {
-<span class="nc" id="L32">    try (var loginIter = Login.typicalLoginIter()) {</span>
+  public static &lt;O extends Flushable &amp; DataOutput&gt; String crackByBruteForce(
+      DataInput dataIn, O dataOut) throws Exception {
+<span class="fc" id="L33">    try (var loginIter = Login.typicalLoginIter()) {</span>
       while (true) {
         // Login must be found before an exhaustion of the iterator.
-<span class="nc bnc" id="L35" title="All 2 branches missed.">        assert loginIter.hasNext();</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">        assert loginIter.hasNext();</span>
         // The loop state.
-<span class="nc" id="L37">        var curLogin = loginIter.next();</span>
+<span class="fc" id="L38">        var curLogin = loginIter.next();</span>
         // Brute-try the current login.
-<span class="nc" id="L39">        var authResp = Client.requestAuthentication(dataIn, dataOut,</span>
+<span class="fc" id="L40">        var authResp = Client.requestAuthentication(dataIn, dataOut,</span>
             new UserCredentials(curLogin, null));
         // The loop's stop condition
-<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (Login.wasCorrect(authResp)) {</span>
-<span class="nc" id="L43">          return curLogin;</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (Login.wasCorrect(authResp)) {</span>
+<span class="fc" id="L44">          return curLogin;</span>
         }
-<span class="nc" id="L45">      }</span>
+<span class="fc" id="L46">      }</span>
     }
   }
 
-  private static boolean wasCorrect(AuthResp authResp) {
-<span class="nc bnc" id="L50" title="All 2 branches missed.">    return !authResp.message().equals(&quot;Wrong login!&quot;);</span>
+  public static boolean wasCorrect(AuthResp authResp) {
+<span class="fc bfc" id="L51" title="All 2 branches covered.">    return switch (authResp.message()) {</span>
+<span class="fc" id="L52">      case &quot;Wrong login!&quot;, &quot;Bad request!&quot; -&gt; false;</span>
+<span class="fc" id="L53">      default -&gt; true;</span>
+    };
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

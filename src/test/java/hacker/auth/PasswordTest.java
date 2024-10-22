@@ -3,9 +3,15 @@ package hacker.auth;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
+import hacker.models.AuthResp;
+import hacker.models.UserCredentials;
 import hacker.util.Converter;
+import hacker.util.FlushableDataOutput;
 import hacker.util.iter.AutoClosableIterator;
+import java.io.DataInput;
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,12 +26,47 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mockito;
 
 final class PasswordTest {
 
   public static final int PWD_COMBS_ARBITRARY_COUNT_LIMIT = 50;
   private static final Pattern ACCEPTED_CHARS_LIST_PATTERN =
       Pattern.compile("^[A-Za-z]{52}0[1-8]{8}9$");
+
+  @Test
+  void crackUsingTimeVulnerability() throws IOException {
+    final String correctPwd = "0saADf1Alsd";
+    final var isCracked = new Object() {
+      boolean value = false;
+    };
+
+    var dataIn = Mockito.mock(DataInput.class);
+    Mockito.when(dataIn.readUTF()).thenAnswer(invocation ->
+        new AuthResp(
+            isCracked.value ? "Connection success!" : "Wrong password!")
+            .toJsonString()
+    );
+    var dataOut = Mockito.mock(FlushableDataOutput.class);
+    Mockito.doAnswer(invocation -> {
+      String userInput = invocation.getArgument(0);
+      String usedPwd = UserCredentials.fromJson(userInput).password();
+      if (correctPwd.startsWith(usedPwd)) {
+        // Should be small to not elongate the testing duration.
+        final int randDurationMultiplier = ThreadLocalRandom.current()
+            .nextInt(1, 4);
+        final long sleepDuration = AuthResult.MIN_EXCEPTIONAL_DURATION_IN_MILIS
+            * randDurationMultiplier;
+        Thread.currentThread().sleep(sleepDuration);
+      }
+      isCracked.value = correctPwd.equals(usedPwd);
+      return null;
+    }).when(dataOut).writeUTF(Mockito.anyString());
+
+    String crackedLogin =
+        Password.crackUsingTimeVulnerability(dataIn, dataOut, null);
+    assertEquals(correctPwd, crackedLogin);
+  }
 
   @Test
   void acceptedLetters() {

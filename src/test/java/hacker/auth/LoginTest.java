@@ -6,14 +6,7 @@ import hacker.models.AuthResp;
 import hacker.models.UserCredentials;
 import hacker.util.FlushableDataOutput;
 import hacker.util.iter.AutoClosableIterator;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
-import java.io.DataInputStream;
-import java.io.DataOutput;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
@@ -29,22 +22,27 @@ final class LoginTest {
 
   @Test
   void crackByBruteForce() throws Exception {
+    // Constants
     final String correctLogin = "admin1";
+    // State
     final var isCracked = new Object() {
       boolean value = false;
     };
-
+    // Creating mocked data input
     var dataIn = Mockito.mock(DataInput.class);
     Mockito.when(dataIn.readUTF()).thenAnswer(invocation ->
         new AuthResp(isCracked.value ? "Connection success!" : "Wrong login!")
             .toJsonString()
     );
+    // Creating mocked data output
     var dataOut = Mockito.mock(FlushableDataOutput.class);
     Mockito.doAnswer(invocation -> {
-      String str = invocation.getArgument(0);
-      isCracked.value = str.contains(correctLogin);
+      String userInput = invocation.getArgument(0);
+      String inputLogin = UserCredentials.fromJson(userInput).login();
+      isCracked.value = correctLogin.equals(inputLogin);
       return null;
     }).when(dataOut).writeUTF(Mockito.anyString());
+    // Checking correctness
     String crackedLogin = Login.crackByBruteForce(dataIn, dataOut);
     assertEquals(correctLogin, crackedLogin);
   }

@@ -2,12 +2,15 @@
 
 import hacker.models.AuthResp;
 
-<span class="nc" id="L5">public record AuthResult(AuthResp response, long durationInNanos) {</span>
+<span class="fc" id="L5">public record AuthResult(AuthResp response, long durationInNanos) {</span>
 
-  public static final int NANOS_IN_MILIS = 1_000_000;
+  public static final long NANOS_IN_MILIS = 1_000_000;
+  public static final long MIN_EXCEPTIONAL_DURATION_IN_MILIS = 20;
+  public static final long MIN_EXCEPTIONAL_DURATION_IN_NANOS =
+      MIN_EXCEPTIONAL_DURATION_IN_MILIS * NANOS_IN_MILIS;
 
   public boolean wasTheUsedPwdAPrefixOfTheCorrectPwd() {
-<span class="nc bnc" id="L10" title="All 2 branches missed.">    return (this.durationInNanos() / NANOS_IN_MILIS) &gt; 0;</span>
+<span class="fc bfc" id="L13" title="All 2 branches covered.">    return this.durationInNanos() &gt;= MIN_EXCEPTIONAL_DURATION_IN_NANOS;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

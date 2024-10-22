@@ -4,9 +4,13 @@ import java.util.regex.Pattern;
 
 public record AuthResp(String message) {
 
-  private static final Pattern JSON_RE_PATTERN =
+  // Static fields
+
+  public static final Pattern JSON_RE_PATTERN =
       Pattern.compile(
           "^\\s*\\{\\s*\"result\"\\s*:\\s*\"(?<result>[^\"]*)\"\\s*\\}\\s*$");
+
+  // CRUD-C
 
   public static AuthResp fromJson(String json) {
     var matcher = JSON_RE_PATTERN.matcher(json);
@@ -16,6 +20,8 @@ public record AuthResp(String message) {
       throw new IllegalArgumentException("Invalid JSON: " + json);
     }
   }
+
+  // CRUD-R
 
   public String toJsonString() {
     return """

@@ -4,10 +4,9 @@ This repo contains the implementation of the last (5th) task from the
 corresponding [hyperskill project][proj_on_hyperskill].
 
 ### In contrast to the [parent repo][parent_repo]
-
+* Uses **Maven** for automation
 * Canonical & rich development configuration
 * Integrated **statical analysis** tools
-* Uses **Maven** for automation
 * No integration with hyperskill ==> can't directly run their checks
 
 ## Quickstart
@@ -33,7 +32,7 @@ cd tnehring_challenging_pwd-hacker_last
 
 ## Unit tests
 
-The project has some unit tests.
+The project has some 74% test coverage made of unit tests.
 Can be run by executing `./mvnw test` in bash.
 
 ## Static analysis (SA)

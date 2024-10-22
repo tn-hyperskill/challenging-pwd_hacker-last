@@ -4,17 +4,31 @@ import java.util.regex.Pattern;
 
 <span class="fc" id="L5">public record AuthResp(String message) {</span>
 
-<span class="fc" id="L7">  private static final Pattern JSON_RE_PATTERN =</span>
-<span class="fc" id="L8">      Pattern.compile(</span>
+  // Static fields
+
+<span class="fc" id="L9">  public static final Pattern JSON_RE_PATTERN =</span>
+<span class="fc" id="L10">      Pattern.compile(</span>
           &quot;^\\s*\\{\\s*\&quot;result\&quot;\\s*:\\s*\&quot;(?&lt;result&gt;[^\&quot;]*)\&quot;\\s*\\}\\s*$&quot;);
 
+  // CRUD-C
+
   public static AuthResp fromJson(String json) {
-<span class="fc" id="L12">    var matcher = JSON_RE_PATTERN.matcher(json);</span>
-<span class="pc bpc" id="L13" title="1 of 2 branches missed.">    if (matcher.matches()) {</span>
-<span class="fc" id="L14">      return new AuthResp(matcher.group(&quot;result&quot;));</span>
+<span class="fc" id="L16">    var matcher = JSON_RE_PATTERN.matcher(json);</span>
+<span class="pc bpc" id="L17" title="1 of 2 branches missed.">    if (matcher.matches()) {</span>
+<span class="fc" id="L18">      return new AuthResp(matcher.group(&quot;result&quot;));</span>
     } else {
-<span class="nc" id="L16">      throw new IllegalArgumentException(&quot;Invalid JSON: &quot; + json);</span>
+<span class="nc" id="L20">      throw new IllegalArgumentException(&quot;Invalid JSON: &quot; + json);</span>
     }
+  }
+
+  // CRUD-R
+
+  public String toJsonString() {
+<span class="fc" id="L27">    return &quot;&quot;&quot;</span>
+        {
+          &quot;result&quot;: &quot;%s&quot;
+        }
+<span class="fc" id="L31">        &quot;&quot;&quot;.formatted(message);</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

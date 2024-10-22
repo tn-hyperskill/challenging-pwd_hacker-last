@@ -11,53 +11,51 @@
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> hacker.app.Log;
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> hacker.models.AuthResp;
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> hacker.models.UserCredentials;
-<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> java.io.DataInputStream;
-<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> java.io.DataOutputStream;
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> java.io.IOException;
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   
-<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="Client" href="../../hacker/auth/Client.html#Client">Client</a> {
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> SO_TIMEOUT = 5000;
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  
-<a class="jxr_linenumber" name="L14" href="#L14">14</a>    <em class="jxr_comment">// CRUD-C</em>
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>    <strong class="jxr_keyword">private</strong> <a name="Client" href="../../hacker/auth/Client.html#Client">Client</a>() {
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>    }
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>    <em class="jxr_comment">// CRUD-R</em>
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="AuthResult" href="../../hacker/auth/AuthResult.html#AuthResult">AuthResult</a> authenticate(
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>        DataInputStream dataIn, DataOutputStream dataOut,
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>        <a name="UserCredentials" href="../../hacker/models/UserCredentials.html#UserCredentials">UserCredentials</a> credentials) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>      <strong class="jxr_keyword">var</strong> start = System.nanoTime();
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>      <strong class="jxr_keyword">var</strong> response = Client.requestAuthentication(dataIn, dataOut, credentials);
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>      <strong class="jxr_keyword">var</strong> reqNanoDuration = System.nanoTime() - start;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="AuthResult" href="../../hacker/auth/AuthResult.html#AuthResult">AuthResult</a>(response, reqNanoDuration);
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>    }
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="AuthResp" href="../../hacker/models/AuthResp.html#AuthResp">AuthResp</a> requestAuthentication(
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>        DataInputStream dataIn, DataOutputStream dataOut,
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>        <a name="UserCredentials" href="../../hacker/models/UserCredentials.html#UserCredentials">UserCredentials</a> credentials) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>      dataOut.writeUTF(credentials.toJsonString());
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>      dataOut.flush();
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>      <strong class="jxr_keyword">return</strong> AuthResp.fromJson(dataIn.readUTF());
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>    }
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="UserCredentials" href="../../hacker/models/UserCredentials.html#UserCredentials">UserCredentials</a> crackUserCredentials(
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>        DataInputStream dataIn, DataOutputStream dataOut) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">var</strong> crackedLogin = Login.crackByBruteForce(dataIn, dataOut);
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>      Log.login(crackedLogin);
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">var</strong> crackedPassword =
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>          Password.crackUsingTimeVulnerability(dataIn, dataOut, crackedLogin);
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>      Log.password(crackedPassword);
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">var</strong> crackedCredentials = <strong class="jxr_keyword">new</strong> <a name="UserCredentials" href="../../hacker/models/UserCredentials.html#UserCredentials">UserCredentials</a>(
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>          crackedLogin,
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>          crackedPassword
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>      );
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">return</strong> crackedCredentials;
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>    }
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  }
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> java.io.DataInput;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> java.io.DataOutput;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> java.io.Flushable;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="Client" href="../../hacker/auth/Client.html#Client">Client</a> {
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> SO_TIMEOUT = 5000;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>    <em class="jxr_comment">// CRUD-C</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>    <strong class="jxr_keyword">private</strong> <a name="Client" href="../../hacker/auth/Client.html#Client">Client</a>() {
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>    }
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>    <em class="jxr_comment">// CRUD-R</em>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;O <strong class="jxr_keyword">extends</strong> Flushable &amp; DataOutput&gt; <a name="AuthResult" href="../../hacker/auth/AuthResult.html#AuthResult">AuthResult</a> authenticate(
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>        DataInput dataIn, O dataOut,
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>        <a name="UserCredentials" href="../../hacker/models/UserCredentials.html#UserCredentials">UserCredentials</a> credentials) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>      <strong class="jxr_keyword">var</strong> start = System.nanoTime();
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>      <strong class="jxr_keyword">var</strong> response = Client.requestAuthentication(dataIn, dataOut, credentials);
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>      <strong class="jxr_keyword">var</strong> reqNanoDuration = System.nanoTime() - start;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="AuthResult" href="../../hacker/auth/AuthResult.html#AuthResult">AuthResult</a>(response, reqNanoDuration);
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>    }
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;O <strong class="jxr_keyword">extends</strong> Flushable &amp; DataOutput&gt; <a name="AuthResp" href="../../hacker/models/AuthResp.html#AuthResp">AuthResp</a> requestAuthentication(
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>        DataInput dataIn, O dataOut,
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>        <a name="UserCredentials" href="../../hacker/models/UserCredentials.html#UserCredentials">UserCredentials</a> credentials) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      dataOut.writeUTF(credentials.toJsonString());
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      dataOut.flush();
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">return</strong> AuthResp.fromJson(dataIn.readUTF());
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>    }
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;O <strong class="jxr_keyword">extends</strong> Flushable &amp; DataOutput&gt; <a name="UserCredentials" href="../../hacker/models/UserCredentials.html#UserCredentials">UserCredentials</a> crackUserCredentials(
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>        DataInput dataIn, O dataOut) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">var</strong> crackedLogin = Login.crackByBruteForce(dataIn, dataOut);
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      Log.login(crackedLogin);
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">var</strong> crackedPassword =
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>          Password.crackUsingTimeVulnerability(dataIn, dataOut, crackedLogin);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      Log.password(crackedPassword);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">var</strong> crackedCredentials = <strong class="jxr_keyword">new</strong> <a name="UserCredentials" href="../../hacker/models/UserCredentials.html#UserCredentials">UserCredentials</a>(crackedLogin, crackedPassword);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">return</strong> crackedCredentials;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>    }
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2024. All rights reserved.</div>

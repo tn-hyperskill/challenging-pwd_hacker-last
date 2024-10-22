@@ -8,9 +8,7 @@ import hacker.util.iter.AutoClosableLinesIterator;
 import hacker.util.iter.PeekableIterator;
 import hacker.util.iter.PeekingIterator;
 import java.io.DataInput;
-import java.io.DataInputStream;
 import java.io.DataOutput;
-import java.io.DataOutputStream;
 import java.io.Flushable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -49,7 +47,6 @@ public final class Password {
           dataIn, dataOut,
           new UserCredentials(login, curPwd)
       );
-      Log.authResult(authResult);
     } while (!adjustPadlock(padlock, authResult));
     return curPwd;
   }

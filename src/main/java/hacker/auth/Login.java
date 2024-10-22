@@ -5,9 +5,7 @@ import hacker.models.UserCredentials;
 import hacker.util.iter.AutoClosableIterator;
 import hacker.util.iter.AutoClosableLinesIterator;
 import java.io.DataInput;
-import java.io.DataInputStream;
 import java.io.DataOutput;
-import java.io.DataOutputStream;
 import java.io.Flushable;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
@@ -50,8 +48,8 @@ public final class Login {
   }
 
   public static boolean wasCorrect(AuthResp authResp) {
-    return switch (authResp.message()){
-      case "Wrong login!", "Bad request!"-> false;
+    return switch (authResp.message()) {
+      case "Wrong login!", "Bad request!" -> false;
       default -> true;
     };
   }

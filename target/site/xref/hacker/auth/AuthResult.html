@@ -12,12 +12,15 @@
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">public</strong> record <a name="AuthResult" href="../../hacker/auth/AuthResult.html#AuthResult">AuthResult</a>(<a name="AuthResp" href="../../hacker/models/AuthResp.html#AuthResp">AuthResp</a> response, <strong class="jxr_keyword">long</strong> durationInNanos) {
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   
-<a class="jxr_linenumber" name="L7" href="#L7">7</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> NANOS_IN_MILIS = 1_000_000;
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> wasTheUsedPwdAPrefixOfTheCorrectPwd() {
-<a class="jxr_linenumber" name="L10" href="#L10">10</a>      <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">this</strong>.durationInNanos() / NANOS_IN_MILIS) &gt; 0;
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>    }
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  }
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> NANOS_IN_MILIS = 1_000_000;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> MIN_EXCEPTIONAL_DURATION_IN_MILIS = 20;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> MIN_EXCEPTIONAL_DURATION_IN_NANOS =
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>        MIN_EXCEPTIONAL_DURATION_IN_MILIS * NANOS_IN_MILIS;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> wasTheUsedPwdAPrefixOfTheCorrectPwd() {
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.durationInNanos() &gt;= MIN_EXCEPTIONAL_DURATION_IN_NANOS;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>    }
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2024. All rights reserved.</div>
