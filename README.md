@@ -32,7 +32,7 @@ cd tnehring_challenging_pwd-hacker_last
 
 ## Unit tests
 
-The project has some 74% test coverage made of unit tests.
+The project has some 70-92% test coverage made of unit tests.
 Can be run by executing `./mvnw test` in bash.
 
 ## Static analysis (SA)
@@ -57,6 +57,9 @@ to generate {spotbugs.html, pmd.html, checkstyle.html} in
 the [./target/site](./target/site) directory.
 
 ## Documentation
+
+Note: **Documentation maybe crude** as my mentor
+explicitly resigned from the good-docs requirement.
 
 This project has documentation mainly for items with abbreviated names &
 overridable methods. Other code items may not be covered.
