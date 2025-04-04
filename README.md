@@ -17,7 +17,7 @@ Go to a chosen installation directory.
 Run in bash or a compatible shell:
 
 ```bash
-git clone https://gitlab.griddynamics.net/pl-java-internship-2024-q3/tnehring_challenging_pwd-hacker_last/
+git clone https://github.com/tn-hyperskill/challenging-pwd_hacker-last
 ```
 
 ### Running the app
@@ -26,7 +26,7 @@ git clone https://gitlab.griddynamics.net/pl-java-internship-2024-q3/tnehring_ch
 2. Execute in bash
 
 ```bash
-cd tnehring_challenging_pwd-hacker_last
+cd challenging-pwd_hacker-last
 ./mvnw clean compile exec:java -Dexec.mainClass="hacker.app.App"
 ```
 
@@ -76,4 +76,4 @@ from `App.main` down the invocation tree.
 
 [proj_on_hyperskill]: https://hyperskill.org/projects/329
 
-[parent_repo]: https://gitlab.griddynamics.net/tnehring/tnehring_challenging_pwd-hacker
+[parent_repo]: https://github.com/tn-hyperskill/challenging-pwd_hacker-solution
