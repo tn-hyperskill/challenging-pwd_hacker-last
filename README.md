@@ -1,4 +1,4 @@
-# Hacker in Java
+# Password Hacker in Java
 
 This repo contains the implementation of the last (5th) task from the
 corresponding [hyperskill project][proj_on_hyperskill].
